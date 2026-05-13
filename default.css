@@ -1,0 +1,129 @@
+.animasyonhover:hover {
+transform: scale(1.02);
+}
+.menu {
+display: none;
+position: fixed;
+top: 0;
+right: 0;
+bottom: 0;
+left: 0;
+background-color: rgba(0, 0, 0, 0.8);
+z-index: 9999;
+animation: slideIn 0.3s ease-in;
+}
+
+.menu-open {
+display: block;
+}
+
+.close-btn {
+position: absolute;
+top: 0.5rem;
+right: 1rem;
+color: #fff;
+font-size: 3rem;
+cursor: pointer;
+}
+
+@keyframes slideIn {
+from {
+transform: translateX(100%);
+}
+to {
+transform: translateX(0);
+}
+}
+.accordion-content {
+display: none;
+}
+
+.text-mavi{
+color: #000000;
+}
+
+.bg-mavi{
+background-color: #000000;
+}
+
+.border-mavi{
+border-color: #000000;
+}
+
+.bg-gradient {
+background: #000000;
+}
+
+.text-beyaz{
+color: #ffffff;
+}
+.swiper-pagination-bullet-active {
+background: #000000!important;
+}
+
+.popup-overlay {
+letter-spacing: 3px;
+justify-content: center;
+align-items: center;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.5);
+z-index: 999;
+display: none;
+}
+
+.popup-content {
+background: white;
+padding: 20px;
+width: 90%;
+max-width: 350px;
+text-align: center;
+border-radius: 5px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+position: relative;
+}
+
+.popup-content button {
+padding:10px;
+background: #000;
+color: #fff;
+border: none;
+border-radius: 5px;
+font-size: 16px;
+font-weight: 600;
+cursor: pointer;
+}
+
+.close-btnx {
+padding:0px!important;
+background: transparent!important;
+color: #000!important;
+position: absolute;
+top: 10px;
+right: 10px;
+color: white;
+border: none;
+font-size: 14px;
+cursor: pointer;
+border-radius: 5px;
+}
+
+.popup-content h2 {
+font-weight: 400;
+font-size: 18px;
+color: #333;
+margin: 10px 0;
+}
+
+.popup-content p {
+font-weight: 600;
+font-size: 22px;
+color: #000;
+margin: 5px 0 15px;
+}
+.popup-content button:hover {
+background: #444;
+}

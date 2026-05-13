@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<base href="https://tugbapapuc.com/" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+<title>Şeffaf Papuç | Kampanyalı Online Ayakkabı Sitesi</title>
+<meta name="description" content="kampanyalı online ayakkabı satın al">
+<link rel="stylesheet" href="./view/css/style.css"/>
+<link rel="stylesheet" href="./view/css/default.css">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet"/>
+<link rel="stylesheet" href="./view/css/swiper-bundle.min.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+<!-- Firebase & Dinamik Pixel Script -->
+<script>
+let FB_PIXEL_ID = '';
+let TT_PIXEL_ID = ''; // TIKTOK ID DEĞİŞKENİ EKLENDİ
+
+window.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js");
+    const { getFirestore, doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js");
+    const firebaseConfig = {
+      apiKey: "AIzaSyDniXyN2LAf5cwgJxYvJKKowe8UhW7GQr8",
+      authDomain: "papuc-98783.firebaseapp.com",
+      projectId: "papuc-98783",
+      storageBucket: "papuc-98783.firebasestorage.app",
+      messagingSenderId: "953928274442",
+      appId: "1:953928274442:web:6d9f39a36dd4e4154285f3"
+    };
+    const app = initializeApp(firebaseConfig, 'pixelApp');
+    const db = getFirestore(app);
+    const settingsDoc = await getDoc(doc(db, "settings", "siteConfig"));
+    
+    if (settingsDoc.exists()) {
+      const settings = settingsDoc.data();
+      
+      // FACEBOOK PIXEL KURULUMU
+      if (settings.facebookPixelId) {
+        FB_PIXEL_ID = settings.facebookPixelId;
+        const noscriptEl = document.getElementById('fb-noscript');
+        if (noscriptEl) {
+          const imgEl = document.createElement('img');
+          imgEl.height = '1'; imgEl.width = '1'; imgEl.style.display = 'none';
+          imgEl.src = `https://www.facebook.com/tr?id=${FB_PIXEL_ID}&ev=PageView&noscript=1`;
+          noscriptEl.innerHTML = '';
+          noscriptEl.appendChild(imgEl);
+        }
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', FB_PIXEL_ID);
+        fbq('track', 'PageView');
+      }
+
+      // TIKTOK PIXEL KURULUMU
+      if (settings.tiktokPixelId) {
+        TT_PIXEL_ID = settings.tiktokPixelId;
+        !function (w, d, t) {
+          w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
+        }(window, document, 'ttq');
+        ttq.load(TT_PIXEL_ID);
+        ttq.page(); // PageView Tetikleyici
+      }
+
+      window.FB_CAPI_ACCESS_TOKEN = settings.facebookCapiToken || 'BURAYA_CAPI_ACCESS_TOKEN_GELECEK';
+      window.FB_CAPI_PIXEL_ID = FB_PIXEL_ID;
+      window._siteSettings = settings;
+    }
+  } catch (error) { console.error('Pixel yüklenirken hata:', error); }
+});
+</script>
+<noscript id="fb-noscript"><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1&ev=PageView&noscript=1"/></noscript>
+
+<style>
+  :root { --primary: #2563eb; --danger: #ef4444; --success: #10b981; --warning: #f59e0b; --bg-light: #f8fafc; --border: #e2e8f0; }
+  .hidden { display: none !important; }
+  .sticky-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 12px 16px; box-shadow: 0 -4px 12px rgba(0,0,0,0.1); z-index: 99999; display: none; align-items: center; justify-content: space-between; }
+  .sticky-info { display: flex; flex-direction: column; }
+  .sticky-label { font-size: 12px; color: #64748b; font-weight: 500; }
+  .sticky-total { font-size: 16px; font-weight: 700; color: #1e293b; }
+  .sticky-btn { background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; transition: 0.2s; }
+  .sticky-btn.active { background: #2563eb; }
+  .order-section { background: var(--bg-light); padding: 24px 0; }
+  .warning-banner { padding: 12px; border-radius: 8px; margin-bottom: 16px; display: flex; gap: 10px; align-items: flex-start; }
+  .warning-banner.danger { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+  .warning-banner.warning { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+  .warning-banner.success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+  .cart-item { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; gap: 12px; margin-bottom: 12px; position: relative; }
+  .cart-item.missing-variant { border-color: var(--danger); background: #fef2f2; }
+  .cart-item img { width: 70px; height: 70px; object-fit: cover; border-radius: 6px; }
+  .remove-btn { position: absolute; top: 8px; right: 8px; background: #fee2e2; color: #991b1b; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; }
+  .variant-select { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; margin-top: 6px; }
+  .variant-select.error { border-color: var(--danger); background: #fef2f2; }
+  .variant-warning { display: flex; align-items: center; gap: 6px; color: var(--danger); font-size: 12px; margin-top: 4px; }
+  .btn-submit { width: 100%; padding: 14px; background: #cbd5e1; color: #64748b; border: none; border-radius: 8px; font-weight: 600; cursor: not-allowed; transition: 0.2s; margin-top: 12px; }
+  .btn-submit.active { background: #2563eb; color: #fff; cursor: pointer; }
+  .btn-submit:hover.active { background: #1d4ed8; }
+  .custom-input, .custom-select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; font-family: inherit; }
+  .info-box { background: #e0f2fe; padding: 12px; border-radius: 8px; font-size: 13px; line-height: 1.5; margin: 16px 0; border: 1px solid #bae6fd; }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 999999; animation: slideUp 0.3s ease; }
+  @keyframes slideUp { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+  .success-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 999999; }
+  .success-modal { background: #fff; padding: 30px; border-radius: 16px; text-align: center; max-width: 400px; }
+  .success-icon { width: 60px; height: 60px; background: #10b981; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 15px; }
+  .lightbox-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 999999; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .lightbox-content { background: #fff; padding: 20px; border-radius: 12px; max-width: 500px; width: 100%; position: relative; }
+  .lightbox-close { position: absolute; top: 10px; right: 10px; background: #f1f5f9; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }
+  .review-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: opacity 0.4s, transform 0.4s; max-width: 500px; margin: 0 auto; }
+  .review-header { display: flex; gap: 14px; align-items: center; margin-bottom: 12px; }
+  .review-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #e2e8f0; }
+  .review-username { font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+  .verified-badge { background: #10b981; color: #fff; font-size: 9px; padding: 3px 10px; border-radius: 12px; font-weight: 700; }
+  .review-stars { color: #f59e0b; font-size: 14px; letter-spacing: 2px; margin-bottom: 8px; }
+  .review-text { color: #475569; font-size: 14px; line-height: 1.7; }
+  .faq-section details { background: #fff; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; padding: 12px; cursor: pointer; }
+  .faq-section summary { font-weight: 600; }
+  .faq-answer { margin-top: 10px; font-size: 14px; color: #64748b; }
+  /* MARKA LOGOSU ÖZEL TASARIMI */
+    .brand-logo-container {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+    }
+    .brand-icon-box {
+      position: relative;
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(145deg, #ffffff, #f0f4f8);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 
+        -5px -5px 12px rgba(255, 255, 255, 0.9),
+        6px 6px 16px rgba(17, 49, 115, 0.1),
+        inset 1px 1px 2px rgba(255, 255, 255, 0.9),
+        inset -1px -1px 2px rgba(17, 49, 115, 0.05);
+      transform: rotate(-3deg);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .brand-logo-container:hover .brand-icon-box {
+      transform: rotate(0deg) scale(1.08);
+      box-shadow: 
+        -5px -5px 12px rgba(255, 255, 255, 0.9),
+        10px 10px 24px rgba(37, 99, 235, 0.25),
+        inset 1px 1px 2px rgba(255, 255, 255, 0.9),
+        inset -1px -1px 2px rgba(17, 49, 115, 0.05);
+    }
+    .brand-text-seffaf {
+      font-family: var(--font-sans);
+      font-size: 34px;
+      font-weight: 900;
+      color: transparent;
+      -webkit-text-stroke: 1.5px #64748b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .brand-text-papuc {
+      font-family: var(--font-sans);
+      font-size: 38px;
+      font-weight: 900;
+      background: linear-gradient(to bottom right, #1e40af, #3b82f6, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      letter-spacing: -1.5px;
+      margin-left: -8px;
+      position: relative;
+      z-index: 2;
+      filter: drop-shadow(2px 4px 6px rgba(37, 99, 235, 0.3));
+    }
+    .brand-dot {
+      font-size: 46px;
+      color: #f59e0b;
+      line-height: 0;
+      margin-left: 2px;
+      filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.7));
+    }
+</style>
+</head>
+
+<body class="flex flex-col min-h-screen font-['Poppins']">
+<div id="ust-banner" class="bg-mavi py-2">
+  <div class="swiper mySwiper">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide"><p class="text-center text-beyaz font-semibold lg:text-base text-xs">Kapıda Ödeme ve Şeffaf Kargo Güvencesi</p></div>
+      <div class="swiper-slide"><p class="text-center text-beyaz font-semibold lg:text-base text-xs">2 Ürün Sadece 1.250₺</p></div>
+      <div class="swiper-slide"><p class="text-center text-beyaz font-semibold lg:text-base text-xs">Ücretsiz Kargo</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="bg-white/90 backdrop-blur-lg py-5 px-5 lg:px-0 border-b border-gray-100 shadow-[0_4px_30px_rgb(0,0,0,0.04)] sticky top-0 z-50 transition-all">
+  <div class="container mx-auto flex items-center justify-center lg:justify-between">
+    
+    <!-- 3D CSS LOGO -->
+    <a href="#" class="brand-logo-container group">
+      
+      <!-- Neumorphic Kutu & Inline SVG Vektör -->
+      <div class="brand-icon-box">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="transform transition-transform duration-300 group-hover:-translate-y-1">
+          <defs>
+            <linearGradient id="icon-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#1e40af" />
+              <stop offset="100%" stop-color="#60a5fa" />
+            </linearGradient>
+          </defs>
+          <path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12zm-7-8c-1.66 0-3-1.34-3-3H7c0 2.76 2.24 5 5 5s5-2.24 5-5h-2c0 1.66-1.34 3-3 3z" fill="url(#icon-grad)"/>
+        </svg>
+      </div>
+      
+      <!-- Tipografi & Maskeleme Efektleri -->
+      <div class="flex items-baseline">
+        <span class="brand-text-seffaf">Şeffaf</span>
+        <span class="brand-text-papuc">Papuç</span>
+        <span class="brand-dot">.</span>
+      </div>
+      
+    </a>
+    
+  </div>
+</header>
+
+<!-- Hero / Countdown - DİNAMİK KAMPANYA BANNER -->
+<section class="container mx-auto py-8 px-5 lg:px-0">
+  <div class="grid grid-cols-1">
+    <div style="background-image: url('../../view/images/67cbaca531250_banner1.jpg');" class="bg-cover bg-no-repeat lg:h-[300px] relative rounded-lg" id="heroBannerBg">
+      <div class="absolute inset-0 bg-black/50 rounded-lg"></div>
+      <div class="flex flex-col items-center justify-center gap-4 py-4 lg:py-0 h-full relative z-50" id="hero-dynamic-content">
+        <div class="bg-mavi p-2 text-beyaz lg:text-2xl text-base font-bold"><p id="dynamicCampaignTitle">2 AYAKKABI SADECE 1.250 TL</p></div>
+        <p class="text-beyaz lg:text-xl text-base font-bold" id="dynamicCampaignSubtitle">ÜSTELİK ÜCRETSİZ ŞEFFAF KARGO!</p>
+        <p class="text-beyaz lg:text-sm text-xs" id="dynamicCampaignDesc"></p>
+        <div class="text-center text-beyaz rounded-2xl shadow-lg">
+          <h2 class="lg:text-xl text-xs font-bold tracking-wider mb-2">KAMPANYA SÜRESİ</h2>
+          <div class="flex space-x-4">
+            <div class="flex flex-col items-center bg-white text-black lg:px-6 px-3 lg:py-4 py-1.5 rounded-xl shadow-md"><span id="hours" class="lg:text-3xl text-sm font-bold">00</span><span class="lg:text-sm text-xs font-medium text-gray-600">SAAT</span></div>
+            <div class="flex flex-col items-center bg-white text-black lg:px-6 px-3 lg:py-4 py-1.5 rounded-xl shadow-md"><span id="minutes" class="lg:text-3xl text-sm font-bold">00</span><span class="lg:text-sm text-xs font-medium text-gray-600">DAKİKA</span></div>
+            <div class="flex flex-col items-center bg-white text-black lg:px-6 px-3 lg:py-4 py-1.5 rounded-xl shadow-md"><span id="seconds" class="lg:text-3xl text-sm font-bold">00</span><span class="lg:text-sm text-xs font-medium text-gray-600">SANİYE</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ÇOK SATANLAR (Dinamik) -->
+<section class="container mx-auto lg:py-10 px-5">
+  <div class="text-center space-y-1 mb-6">
+    <h1 class="lg:text-2xl text-lg font-bold">ÇOK SATANLAR</h1>
+    <p class="text-gray-500 lg:text-base text-xs">Çok satan ürünlerimizi bu alandan inceleyebilirsiniz.</p>
+  </div>
+  <div class="swiper mySwiper3">
+    <div class="swiper-wrapper mb-10" id="bestsellers-swiper-wrapper"></div>
+    <div class="swiper-pagination"></div>
+  </div>
+</section>
+
+<!-- TÜM ÜRÜNLER (Dinamik) -->
+<section class="container mx-auto lg:py-10 py-5 px-5 lg:px-0">
+  <div class="text-center space-y-1 mb-6">
+    <h1 class="lg:text-2xl text-lg font-bold">TÜM ÜRÜNLER</h1>
+    <p class="text-gray-500 lg:text-base text-xs">Tüm ürünlerimizi bu alandan inceleyebilirsiniz.</p>
+  </div>
+  <div class="mt-6 grid lg:grid-cols-4 grid-cols-2 gap-5" id="all-products-grid">
+    <div id="loading" style="grid-column: 1/-1; text-align:center; padding:40px; font-size:14px; color:#64748b;">KOLEKSİYON YÜKLENİYOR...</div>
+  </div>
+</section>
+
+<!-- Features -->
+<div class="bg-[#f8f8f8] pt-4 pb-6">
+  <div class="container mx-auto grid lg:grid-cols-4 grid-cols-2 lg:gap-16 gap-5">
+    <div class="text-center"><i class="ri-truck-line ri-2x text-mavi"></i><h2 class="lg:text-lg text-sm font-medium -mt-3">Ücretsiz Kargo</h2><p class="text-xs text-gray-500">Ücretsiz kargo ve hızlı teslimat ayrıcalığı</p></div>
+    <div class="text-center"><i class="ri-shield-check-line ri-2x text-mavi"></i><h2 class="lg:text-lg text-sm font-medium -mt-3">Güvenli Alışveriş</h2><p class="text-xs text-gray-500">Hızlı ve güvenli alışveriş ile keyifle tarzını belirle</p></div>
+    <div class="text-center"><i class="ri-gift-2-line ri-2x text-mavi"></i><h2 class="lg:text-lg text-sm font-medium -mt-3">Hediye Ürün</h2><p class="text-xs text-gray-500">Hızlı ve güvenli alışveriş ile keyifle tarzını belirle</p></div>
+    <div class="text-center"><i class="ri-group-line ri-2x text-mavi"></i><h2 class="lg:text-lg text-sm font-medium -mt-3">Müşteri Memnuniyeti</h2><p class="text-xs text-gray-500">Hızlı ve güvenli alışveriş ile keyifle tarzını belirle</p></div>
+  </div>
+</div>
+
+<!-- ✅ Müşteri Yorumları (İlk HTML'den) -->
+<section class="reviews-section container mx-auto py-10 px-5 lg:px-0">
+  <div class="text-center mb-8">
+    <h2 class="text-3xl font-bold text-mavi mb-2">Müşterilerimiz Ne Diyor?</h2>
+    <p class="text-gray-500">Gerçek müşterilerimizin deneyimlerini okuyun</p>
+  </div>
+  <div class="max-w-2xl mx-auto">
+    <div id="review-container" class="review-card"></div>
+    <div style="display:flex; justify-content:center; gap:8px; margin-top:20px;" id="review-dots"></div>
+  </div>
+</section>
+
+<!-- SSS -->
+<section class="faq-section container mx-auto py-10 px-5 lg:px-0">
+  <h2 class="font-serif text-3xl font-bold text-mavi text-center mb-8">Sıkça Sorulan Sorular</h2>
+  <details><summary>🚚 Kargom kaç günde ulaşır?</summary><div class="faq-answer">Siparişiniz onaylandıktan sonra 24 saat içerisinde kargoya verilir. Teslimat süresi bulunduğunuz ile göre 1-3 iş günü arası değişmektedir.</div></details>
+  <details><summary>💳 Kapıda ödeme yapabilir miyim?</summary><div class="faq-answer">Evet, tüm siparişlerinizde şeffaf kargo güvencesiyle kapıda nakit veya kredi kartı ile ödeme yapabilirsiniz.</div></details>
+  <details><summary>🔄 İade veya değişim var mı?</summary><div class="faq-answer">Ürünlerimizde koşulsuz şartsız 14 gün içerisinde değişim garantisi mevcuttur. Kusurlu ürünlerde birebir iade hakkınız bulunmaktadır.</div></details>
+  <details><summary>❓ Ürünler orijinal mi?</summary><div class="faq-answer">Koleksiyonumuzdaki tüm ürünler, global standartlarda üretilmiş 1. sınıf premium ithal ürünlerdir.</div></details>
+</section>
+
+<!-- Sipariş Formu -->
+<section id="order-section" class="order-section hidden container mx-auto py-10 px-5 lg:px-0">
+  <div class="max-w-3xl mx-auto px-4">
+    <h2 class="font-serif text-3xl font-bold mb-4">Sipariş Bilgileri</h2>
+    <div id="order-warning-banner" class="warning-banner danger">
+      <div class="warning-icon">⚠️</div>
+      <div class="warning-content">
+        <h4 id="warning-title">Ürün Seçimi Gerekli</h4>
+        <p id="warning-message">Sipariş verebilmek için lütfen yukarıdan en az 2 ürün seçin.</p>
+      </div>
+    </div>
+    <div id="cart-items-summary" style="margin-bottom: 24px;"></div>
+    <form id="orderForm">
+      <div class="input-group"><label>Ad Soyad *</label><input class="custom-input" type="text" id="adSoyad" placeholder="Adınız ve soyadınız" required></div>
+<div class="input-group">
+          <label>Telefon Numarası *</label>
+          <input class="custom-input" type="tel" id="telefon" placeholder="05XX XXX XX XX" oninput="let v = this.value.replace(/[^0-9]/g, ''); if(v.startsWith('905')) v = '0' + v.substring(2); else if(v.startsWith('5')) v = '0' + v; else if(v.length > 0 && !v.startsWith('0')) v = '0' + v; this.value = v.substring(0, 11);" required>
+        </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="input-group"><label>İl *</label><select class="custom-select" id="il" required><option value="">İl Seçiniz</option></select></div>
+        <div class="input-group"><label>İlçe *</label><select class="custom-select" id="ilce" required disabled><option value="">Önce il seçiniz</option></select></div>
+      </div>
+      <div class="input-group"><label>Açık Adres *</label><textarea class="custom-input" id="adres" placeholder="Mahalle, sokak, bina no, daire no..." required rows="3"></textarea></div>
+      <div class="input-group"><label>Not (opsiyonel)</label><input class="custom-input" type="text" id="mesaj" placeholder="Örn: Kapı zili arızalı"></div>
+      <div class="info-box">⚠️ <strong class="text-primary">Sipariş Ver</strong> butonuna bastığınızda siparişiniz oluşturulur.<br>📲 Onay için müşteri temsilcimiz WhatsApp üzerinden iletişime geçecektir.<br>🚚 <strong class="text-accent">Önemli Uyarı</strong>: ARAS KARGO ile çalışıyoruz. Köylere, askeriye ve inşaatlara ARAS KARGO gönderim yapmamaktadır.</div>
+      <button type="submit" id="submitBtn" class="btn-submit" disabled>2 ürün seçmeniz gerekiyor</button>
+    </form>
+  </div>
+</section>
+
+<!-- Sticky Sepet Bar -->
+<div id="sticky-bar" class="sticky-bar">
+  <div class="sticky-info">
+    <div class="sticky-label" id="cart-count">0 Ürün</div>
+    <div class="sticky-total" id="total-price-display">0.00 ₺</div>
+  </div>
+  <button onclick="window.processStickyClick()" class="sticky-btn" id="sticky-checkout-btn">Ürün Seçin</button>
+</div>
+
+<!-- Footer -->
+<footer class="bg-gradient py-8 lg:px-0 px-5">
+  <div class="container mx-auto text-center text-beyaz space-y-2">
+    <h3 class="lg:text-xl text-sm font-semibold">Bilgilendirme</h3>
+    <p class="font-medium lg:text-base text-xs">Ürünü sipariş verdikten sonra gün içinde hazırlanıp kargoya teslim edilir. Kargo Tarafından sipariş esnasında vermiş olduğunuz telefon numarasına kargo takip numarası iletilcektir. Kargolarımızın Teslim süreci 2-4 iş günüdür doğu İllerimize ve köylere bu süreç 1-2 gün uzaya bilmektedir.</p>
+  </div>
+</footer>
+<div class="container mx-auto py-5 lg:px-0 px-5 flex items-center justify-between mb-10">
+  <p class="lg:text-base text-sm">Copyright © 2026 Şeffaf Papuç</p>
+  <div class="flex items-center gap-2"><i class="ri-visa-fill ri-xl"></i><i class="ri-mastercard-fill ri-xl"></i></div>
+</div>
+
+<!-- Dinamik JS & Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import { getFirestore, collection, getDocs, doc, getDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDniXyN2LAf5cwgJxYvJKKowe8UhW7GQr8",
+  authDomain: "papuc-98783.firebaseapp.com",
+  projectId: "papuc-98783",
+  storageBucket: "papuc-98783.firebasestorage.app",
+  messagingSenderId: "953928274442",
+  appId: "1:953928274442:web:6d9f39a36dd4e4154285f3"
+};
+const app = initializeApp(firebaseConfig, 'mainApp');
+const db = getFirestore(app);
+
+let cart = [];
+let allProducts = [];
+let campaignSettings = { active: false, secondProductPrice: 0, message: "", minOrderCount: 2 };
+let userData = {};
+window._hasAutoScrolledToForm = false;
+
+// FACEBOOK PIXEL FONKSİYONLARI
+const FacebookPixel = {
+  track(eventName, params = {}, eventId = null) { if(typeof fbq==='function') fbq('track', eventName, params, eventId?{eventID:eventId}:{}); },
+  trackAddToCart(p) { this.track('AddToCart', { content_name: p.isim, content_ids: [p.id], content_type: 'product', value: p.fiyat, currency: 'TRY' }); },
+  trackInitiateCheckout(items, total) {
+    const c = items.map((item, i) => ({ id: item.id, quantity: 1, item_price: (i>0&&campaignSettings.active)?campaignSettings.secondProductPrice:item.fiyat, name: item.isim }));
+    this.track('InitiateCheckout', { content_ids: items.map(i=>i.id), contents: c, content_type: 'product', value: total, currency: 'TRY', num_items: items.length });
+  },
+  trackPurchase(oid, items, total, cust={}) {
+    const c = items.map((item, i) => ({ id: item.id, quantity: 1, item_price: (i>0&&campaignSettings.active)?campaignSettings.secondProductPrice:item.fiyat, name: item.isim }));
+    const p = { content_type: 'product', contents: c, content_ids: items.map(i=>i.id), value: total, currency: 'TRY', num_items: items.length, order_id: oid };
+    if(cust.phone) p.ph = cust.phone;
+    if(cust.firstName) p.fn = cust.firstName;
+    this.track('Purchase', p, oid);
+  }
+};
+
+// TIKTOK PIXEL FONKSİYONLARI (YENİ EKLENDİ)
+const TikTokPixel = {
+  track(eventName, params = {}) { if(typeof ttq !== 'undefined') ttq.track(eventName, params); },
+  trackAddToCart(p) { 
+    this.track('AddToCart', { content_id: p.id, content_type: 'product', content_name: p.isim, value: p.fiyat, currency: 'TRY' }); 
+  },
+  trackInitiateCheckout(items, total) {
+    const c = items.map((item, i) => ({ content_id: item.id, quantity: 1, price: (i>0&&campaignSettings.active)?campaignSettings.secondProductPrice:item.fiyat, content_name: item.isim }));
+    this.track('InitiateCheckout', { contents: c, content_type: 'product', value: total, currency: 'TRY' });
+  },
+  trackCompletePayment(oid, items, total) {
+    const c = items.map((item, i) => ({ content_id: item.id, quantity: 1, price: (i>0&&campaignSettings.active)?campaignSettings.secondProductPrice:item.fiyat, content_name: item.isim }));
+    this.track('CompletePayment', { contents: c, content_type: 'product', value: total, currency: 'TRY', order_id: oid });
+  }
+};
+
+// ✅ İLK HTML'DEN ALINAN 10 YORUM
+const reviews = [
+  { name: "Kerem Yılmaz", avatar: "https://i.pravatar.cc/100?img=11", date: "1 gün önce", stars: 5, text: "1500 TL'ye bu kalitede ayakkabı bulmak imkansız dediler, ama gerçekten harika. 2 günde kargolandı, paketleme bile premium seviyedeydi." },
+  { name: "Sibel Demirci", avatar: "https://i.pravatar.cc/100?img=5", date: "1 hafta önce", stars: 5, text: "Kampanyadan 2 ayakkabı aldım, ikisi de birbirinden kaliteli. Renkler tam fotodaki gibi, dikişler sapasağlam. Bu fiyata böyle ürün gerçekten büyük fırsat." },
+  { name: "Onur Karadağ", avatar: "https://i.pravatar.cc/100?img=12", date: "3 gün önce", stars: 5, text: "Kumaşın yumuşaklığı, baskı kalitesi gerçekten 1250 TL bandında beklenmeyecek düzeyde. Yaz için ideal olmuş. Kesinlikle tavsiye ederim." },
+  { name: "Büşra Akkaya", avatar: "https://i.pravatar.cc/100?img=9", date: "5 gün önce", stars: 5, text: "Kapıda ödeme ile sipariş verdim, ayakkabılar elime ulaşmadan paketi açıp kontrol ettim. Kalite tam istediğim gibi. 10 üzerinden 10!" },
+  { name: "Caner Taşkın", avatar: "https://i.pravatar.cc/100?img=15", date: "1 gün önce", stars: 5, text: "Siparişim ertesi gün elime geçti. Ayakkabının rengi ve modeli fotoğraflardakinin aynısı, hatta canlıda daha güzel duruyor. Kaçırmayın." },
+  { name: "Ebru Sever", avatar: "https://i.pravatar.cc/100?img=23", date: "4 gün önce", stars: 5, text: "Bir ayakkabıyı beden uymadığı için iade ettim, süreç çok sorunsuz ilerledi. WhatsApp'tan anında dönüş yapıp yenisini gönderdiler." },
+  { name: "Volkan Keskin", avatar: "https://i.pravatar.cc/100?img=33", date: "6 gün önce", stars: 4, text: "Ayakkabı kalitesi fiyatına göre çok iyi, yumuşacık. Sadece kargo biraz gecikti, onun dışında üründen çok memnunum." },
+  { name: "Gamze Erdoğan", avatar: "https://i.pravatar.cc/100?img=44", date: "2 hafta önce", stars: 5, text: "Arkadaşıma doğum günü hediyesi olarak aldım, paketleme o kadar şıktı ki ekstra hediye paketi yaptırmama gerek kalmadı." },
+  { name: "Umut Çakmak", avatar: "https://i.pravatar.cc/100?img=52", date: "3 gün önce", stars: 5, text: "Beden kalıbı tam oturdu, ne bol ne dar. Bu fiyata bu performans müthiş. İkinci siparişimi az önce verdim." },
+  { name: "Pelin Şentürk", avatar: "https://i.pravatar.cc/100?img=61", date: "1 hafta önce", stars: 5, text: "Canlı destekten beden tavsiyesi aldım, çok yardımcı oldular. Ayakkabı tam anlatıldığı gibi geldi. Fiyat performans şampiyonu." }
+];
+let currentReviewIndex = 0;
+
+function updateReviewDisplay() {
+  const r = reviews[currentReviewIndex];
+  document.getElementById('review-container').style.opacity = '0';
+  document.getElementById('review-container').style.transform = 'translateY(8px)';
+  setTimeout(() => {
+    document.getElementById('review-container').innerHTML = `
+      <div class="review-header">
+        <img src="${r.avatar}" alt="${r.name}" class="review-avatar" onerror="this.src='https://i.pravatar.cc/100?u=${r.name}'">
+        <div>
+          <div class="review-username">${r.name} <span class="verified-badge">✓ Doğrulanmış Alışveriş</span></div>
+          <div style="font-size:11px; color:#94a3b8; margin-top:2px;">${r.date}</div>
+        </div>
+      </div>
+      <div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+      <div class="review-text">"${r.text}"</div>`;
+    document.getElementById('review-container').style.opacity = '1';
+    document.getElementById('review-container').style.transform = 'translateY(0)';
+    renderReviewDots();
+  }, 250);
+}
+
+function renderReviewDots() {
+  document.getElementById('review-dots').innerHTML = reviews.map((_, i) => 
+    `<span style="width:10px;height:10px;border-radius:50%;background:${i===currentReviewIndex?'#2563eb':'#e2e8f0'};cursor:pointer;transition:0.3s;" onclick="window._goReview(${i})"></span>`
+  ).join('');
+}
+window._goReview = (i) => { currentReviewIndex = i; updateReviewDisplay(); };
+setInterval(() => { currentReviewIndex = (currentReviewIndex + 1) % reviews.length; updateReviewDisplay(); }, 5000);
+
+// ✅ TÜM İL VE İLÇELER (81 İL)
+const ilIlceVerileri = {
+  "Adana":["Aladağ","Ceyhan","Çukurova","Feke","İmamoğlu","Karaisalı","Karataş","Kozan","Pozantı","Saimbeyli","Sarıçam","Seyhan","Tufanbeyli","Yumurtalık","Yüreğir"],
+  "Adıyaman":["Besni","Çelikhan","Gerger","Gölbaşı","Kahta","Merkez","Samsat","Sincik","Tut"],
+  "Afyonkarahisar":["Başmakçı","Bayat","Bolvadin","Çay","Çobanlar","Dazkırı","Dinar","Emirdağ","Evciler","Hocalar","İhsaniye","İscehisar","Kızılören","Merkez","Sandıklı","Sinanpaşa","Sultandağı","Şuhut"],
+  "Ağrı":["Diyadin","Doğubayazıt","Eleşkirt","Hamur","Merkez","Patnos","Taşlıçay","Tutak"],
+  "Amasya":["Göynücek","Gümüşhacıköy","Hamamözü","Merkez","Merzifon","Suluova","Taşova"],
+  "Ankara":["Akyurt","Altındağ","Ayaş","Bala","Beypazarı","Çamlıdere","Çankaya","Çubuk","Elmadağ","Etimesgut","Evren","Gölbaşı","Güdül","Haymana","Kahramankazan","Kalecik","Keçiören","Kızılcahamam","Mamak","Nallıhan","Polatlı","Pursaklar","Sincan","Şereflikoçhisar","Yenimahalle"],
+  "Antalya":["Akseki","Aksu","Alanya","Demre","Döşemealtı","Elmalı","Finike","Gazipaşa","Gündoğmuş","İbradı","Kaş","Kemer","Kepez","Konyaaltı","Korkuteli","Kumluca","Manavgat","Muratpaşa","Serik"],
+  "Artvin":["Ardanuç","Arhavi","Borçka","Hopa","Merkez","Murgul","Şavşat","Yusufeli"],
+  "Aydın":["Bozdoğan","Buharkent","Çine","Didim","Efeler","Germencik","İncirliova","Karacasu","Karpuzlu","Koçarlı","Köşk","Kuşadası","Kuyucak","Nazilli","Söke","Sultanhisar","Yenipazar"],
+  "Balıkesir":["Altıeylül","Ayvalık","Balya","Bandırma","Bigadiç","Burhaniye","Dursunbey","Edremit","Erdek","Gömeç","Gönen","Havran","İvrindi","Karesi","Kepsut","Manyas","Marmara","Savaştepe","Sındırgı","Susurluk"],
+  "Bilecik":["Bozüyük","Gölpazarı","İnhisar","Merkez","Osmaneli","Pazaryeri","Söğüt","Yenipazar"],
+  "Bingöl":["Adaklı","Genç","Karlıova","Kiğı","Merkez","Solhan","Yayladere","Yedisu"],
+  "Bitlis":["Adilcevaz","Ahlat","Güroymak","Hizan","Merkez","Mutki","Tatvan"],
+  "Bolu":["Dörtdivan","Gerede","Göynük","Kıbrıscık","Mengen","Merkez","Mudurnu","Seben","Yeniçağa"],
+  "Burdur":["Ağlasun","Altınyayla","Bucak","Çavdır","Çeltikçi","Gölhisar","Karamanlı","Kemer","Merkez","Tefenni","Yeşilova"],
+  "Bursa":["Büyükorhan","Gemlik","Gürsu","Harmancık","İnegöl","İznik","Karacabey","Keles","Kestel","Mudanya","Mustafakemalpaşa","Nilüfer","Orhaneli","Orhangazi","Osmangazi","Yenişehir","Yıldırım"],
+  "Çanakkale":["Ayvacık","Bayramiç","Biga","Bozcaada","Çan","Eceabat","Ezine","Gelibolu","Gökçeada","Lapseki","Merkez","Yenice"],
+  "Çankırı":["Atkaracalar","Bayramören","Çerkeş","Eldivan","Ilgaz","Kızılırmak","Korgun","Kurşunlu","Merkez","Orta","Şabanözü","Yapraklı"],
+  "Çorum":["Alaca","Bayat","Boğazkale","Dodurga","İskilip","Kargı","Laçin","Mecitözü","Merkez","Oğuzlar","Ortaköy","Osmancık","Sungurlu","Uğurludağ"],
+  "Denizli":["Acıpayam","Babadağ","Baklan","Bekilli","Beyağaç","Bozkurt","Buldan","Çal","Çameli","Çardak","Çivril","Güney","Honaz","Kale","Merkezefendi","Pamukkale","Sarayköy","Serinhisar","Tavas"],
+  "Diyarbakır":["Bağlar","Bismil","Çermik","Çınar","Çüngüş","Dicle","Eğil","Ergani","Hani","Hazro","Kayapınar","Kocaköy","Kulp","Lice","Silvan","Sur","Yenişehir"],
+  "Edirne":["Enez","Havsa","İpsala","Keşan","Lalapaşa","Meriç","Merkez","Süloğlu","Uzunköprü"],
+  "Elazığ":["Ağın","Alacakaya","Arıcak","Baskil","Karakoçan","Keban","Kovancılar","Maden","Merkez","Palu","Sivrice"],
+  "Erzincan":["Çayırlı","İliç","Kemah","Kemaliye","Merkez","Otlukbeli","Refahiye","Tercan","Üzümlü"],
+  "Erzurum":["Aşkale","Aziziye","Çat","Hınıs","Horasan","İspir","Karaçoban","Karayazı","Köprüköy","Narman","Oltu","Olur","Palandöken","Pasinler","Pazaryolu","Şenkaya","Tekman","Tortum","Uzundere","Yakutiye"],
+  "Eskişehir":["Alpu","Beylikova","Çifteler","Günyüzü","Han","İnönü","Mahmudiye","Mihalgazi","Mihalıççık","Odunpazarı","Sarıcakaya","Seyitgazi","Sivrihisar","Tepebaşı"],
+  "Gaziantep":["Araban","İslahiye","Karkamış","Nizip","Nurdağı","Oğuzeli","Şahinbey","Şehitkamil","Yavuzeli"],
+  "Giresun":["Alucra","Bulancak","Çamoluk","Çanakçı","Dereli","Doğankent","Espiye","Eynesil","Görele","Güce","Keşap","Merkez","Piraziz","Şebinkarahisar","Tirebolu","Yağlıdere"],
+  "Gümüşhane":["Kelkit","Köse","Kürtün","Merkez","Şiran","Torul"],
+  "Hakkari":["Çukurca","Derecik","Merkez","Şemdinli","Yüksekova"],
+  "Hatay":["Altınözü","Antakya","Arsuz","Belen","Defne","Dörtyol","Erzin","Hassa","İskenderun","Kırıkhan","Kumlu","Payas","Reyhanlı","Samandağ","Yayladağı"],
+  "Iğdır":["Aralık","Karakoyunlu","Merkez","Tuzluca"],
+  "Isparta":["Aksu","Atabey","Eğirdir","Gelendost","Gönen","Keçiborlu","Merkez","Senirkent","Sütçüler","Şarkikaraağaç","Uluborlu","Yalvaç","Yenişarbademli"],
+  "İstanbul":["Adalar","Arnavutköy","Ataşehir","Avcılar","Bağcılar","Bahçelievler","Bakırköy","Başakşehir","Bayrampaşa","Beşiktaş","Beykoz","Beylikdüzü","Beyoğlu","Büyükçekmece","Çatalca","Çekmeköy","Esenler","Esenyurt","Eyüpsultan","Fatih","Gaziosmanpaşa","Güngören","Kadıköy","Kağıthane","Kartal","Küçükçekmece","Maltepe","Pendik","Sancaktepe","Sarıyer","Silivri","Sultanbeyli","Sultangazi","Şile","Şişli","Tuzla","Ümraniye","Üsküdar","Zeytinburnu"],
+  "İzmir":["Aliağa","Balçova","Bayındır","Bayraklı","Bergama","Beydağ","Bornova","Buca","Çeşme","Çiğli","Dikili","Foça","Gaziemir","Güzelbahçe","Karabağlar","Karaburun","Karşıyaka","Kemalpaşa","Kınık","Kiraz","Konak","Menderes","Menemen","Narlıdere","Ödemiş","Seferihisar","Selçuk","Tire","Torbalı","Urla"],
+  "Kahramanmaraş":["Afşin","Andırın","Çağlayancerit","Dulkadiroğlu","Ekinözü","Elbistan","Göksun","Nurhak","Onikişubat","Pazarcık","Türkoğlu"],
+  "Karabük":["Eflani","Eskipazar","Merkez","Ovacık","Safranbolu","Yenice"],
+  "Karaman":["Ayrancı","Başyayla","Ermenek","Merkez","Kazımkarabekir","Sarıveliler"],
+  "Kars":["Akyaka","Arpaçay","Digor","Kağızman","Merkez","Sarıkamış","Selim","Susuz"],
+  "Kastamonu":["Abana","Ağlı","Araç","Azdavay","Bozkurt","Cide","Çatalzeytin","Daday","Devrekani","Doğanyurt","Hanönü","İhsangazi","İnebolu","Küre","Merkez","Pınarbaşı","Seydiler","Şenpazar","Taşköprü","Tosya"],
+  "Kayseri":["Akkışla","Bünyan","Develi","Felahiye","Hacılar","İncesu","Kocasinan","Melikgazi","Özvatan","Pınarbaşı","Sarıoğlan","Sarız","Talas","Tomarza","Yahyalı","Yeşilhisar"],
+  "Kırıkkale":["Bahşılı","Balışeyh","Çelebi","Delice","Karakeçili","Keskin","Merkez","Sulakyurt","Yahşihan"],
+  "Kırklareli":["Babaeski","Demirköy","Kofçaz","Lüleburgaz","Merkez","Pehlivanköy","Pınarhisar","Vize"],
+  "Kırşehir":["Akçakent","Akpınar","Boztepe","Çiçekdağı","Kaman","Merkez","Mucur"],
+  "Kilis":["Elbeyli","Merkez","Musabeyli","Polateli"],
+  "Kocaeli":["Başiskele","Çayırova","Darıca","Derince","Dilovası","Gebze","Gölcük","İzmit","Kandıra","Karamürsel","Kartepe","Körfez"],
+  "Konya":["Ahırlı","Akören","Akşehir","Altınekin","Beyşehir","Bozkır","Cihanbeyli","Çeltik","Çumra","Derbent","Derebucak","Doğanhisar","Emirgazi","Ereğli","Güneysınır","Hadim","Halkapınar","Hüyük","Ilgın","Kadınhanı","Karapınar","Karatay","Kulu","Meram","Sarayönü","Selçuklu","Seydişehir","Taşkent","Tuzlukçu","Yalıhüyük","Yunak"],
+  "Kütahya":["Altıntaş","Aslanapa","Çavdarhisar","Domaniç","Dumlupınar","Emet","Gediz","Hisarcık","Merkez","Pazarlar","Simav","Şaphane","Tavşanlı"],
+  "Malatya":["Akçadağ","Arapgir","Arguvan","Battalgazi","Darende","Doğanşehir","Doğanyol","Hekimhan","Kale","Kuluncak","Pütürge","Yazıhan","Yeşilyurt"],
+  "Manisa":["Ahmetli","Akhisar","Alaşehir","Demirci","Gölmarmara","Gördes","Kırkağaç","Köprübaşı","Kula","Salihli","Sarıgöl","Saruhanlı","Selendi","Soma","Şehzadeler","Turgutlu","Yunusemre"],
+  "Mardin":["Artuklu","Dargeçit","Derik","Kızıltepe","Mazıdağı","Midyat","Nusaybin","Ömerli","Savur","Yeşilli"],
+  "Mersin":["Akdeniz","Anamur","Aydıncık","Bozyazı","Çamlıyayla","Erdemli","Gülnar","Mezitli","Mut","Silifke","Tarsus","Toroslar","Yenişehir"],
+  "Muğla":["Bodrum","Dalaman","Datça","Fethiye","Kavaklıdere","Köyceğiz","Marmaris","Menteşe","Milas","Ortaca","Seydikemer","Ula","Yatağan"],
+  "Muş":["Bulanık","Hasköy","Korkut","Malazgirt","Merkez","Varto"],
+  "Nevşehir":["Acıgöl","Avanos","Derinkuyu","Gülşehir","Hacıbektaş","Kozaklı","Merkez","Ürgüp"],
+  "Niğde":["Altunhisar","Bor","Çamardı","Çiftlik","Merkez","Ulukışla"],
+  "Ordu":["Akkuş","Altınordu","Aybastı","Çamaş","Çatalpınar","Çaybaşı","Fatsa","Gölköy","Gülyalı","Gürgentepe","İkizce","Kabadüz","Kabataş","Korgan","Kumru","Mesudiye","Perşembe","Ulubey","Ünye"],
+  "Osmaniye":["Bahçe","Düziçi","Hasanbeyli","Kadirli","Merkez","Sumbas","Toprakkale"],
+  "Rize":["Ardeşen","Çamlıhemşin","Çayeli","Derepazarı","Fındıklı","Güneysu","Hemşin","İkizdere","İyidere","Kalkandere","Merkez","Pazar"],
+  "Sakarya":["Adapazarı","Akyazı","Arifiye","Erenler","Ferizli","Geyve","Hendek","Karapürçek","Karasu","Kaynarca","Kocaali","Pamukova","Sapanca","Serdivan","Söğütlü","Taraklı"],
+  "Samsun":["19 Mayıs","Alaçam","Asarcık","Atakum","Ayvacık","Bafra","Canik","Çarşamba","Havza","İlkadım","Kavak","Ladik","Salıpazarı","Tekkeköy","Terme","Vezirköprü","Yakakent"],
+  "Siirt":["Baykan","Eruh","Kurtalan","Merkez","Pervari","Şirvan","Tillo"],
+  "Sinop":["Ayancık","Boyabat","Dikmen","Durağan","Erfelek","Gerze","Merkez","Saraydüzü","Türkeli"],
+  "Sivas":["Akıncılar","Altınyayla","Divriği","Doğanşar","Gemerek","Gölova","Gürün","Hafik","İmranlı","Kangal","Koyulhisar","Merkez","Suşehri","Şarkışla","Ulaş","Yıldızeli","Zara"],
+  "Şanlıurfa":["Akçakale","Birecik","Bozova","Ceylanpınar","Eyyübiye","Halfeti","Haliliye","Harran","Hilvan","Karaköprü","Siverek","Suruç","Viranşehir"],
+  "Şırnak":["Beytüşşebap","Cizre","Güçlükonak","İdil","Merkez","Silopi","Uludere"],
+  "Tekirdağ":["Çerkezköy","Çorlu","Ergene","Hayrabolu","Kapaklı","Malkara","Marmaraereğlisi","Muratlı","Saray","Süleymanpaşa","Şarköy"],
+  "Tokat":["Almus","Artova","Başçiftlik","Erbaa","Merkez","Niksar","Pazar","Reşadiye","Sulusaray","Turhal","Yeşilyurt","Zile"],
+  "Trabzon":["Akçaabat","Araklı","Arsin","Beşikdüzü","Çarşıbaşı","Çaykara","Dernekpazarı","Düzköy","Hayrat","Köprübaşı","Maçka","Of","Ortahisar","Sürmene","Şalpazarı","Tonya","Vakfıkebir","Yomra"],
+  "Tunceli":["Çemişgezek","Hozat","Mazgirt","Merkez","Nazımiye","Ovacık","Pertek","Pülümür"],
+  "Uşak":["Banaz","Eşme","Karahallı","Merkez","Sivaslı","Ulubey"],
+  "Van":["Bahçesaray","Başkale","Çaldıran","Çatak","Edremit","Erciş","Gevaş","Gürpınar","İpekyolu","Muradiye","Özalp","Saray","Tuşba"],
+  "Yalova":["Altınova","Armutlu","Çınarcık","Çiftlikköy","Merkez","Termal"],
+  "Yozgat":["Akdağmadeni","Aydıncık","Boğazlıyan","Çandır","Çayıralan","Çekerek","Kadışehri","Merkez","Saraykent","Sarıkaya","Sorgun","Şefaatli","Yenifakılı","Yerköy"],
+  "Zonguldak":["Alaplı","Çaycuma","Devrek","Ereğli","Gökçebey","Kilimli","Kozlu","Merkez"]
+};
+
+function initIlIlceSelectors() {
+  const ilSelect = document.getElementById('il'), ilceSelect = document.getElementById('ilce');
+  ilSelect.innerHTML = '<option value="">İl Seçiniz</option>';
+  Object.keys(ilIlceVerileri).sort().forEach(il => { const opt = document.createElement('option'); opt.value = il; opt.textContent = il; ilSelect.appendChild(opt); });
+  ilSelect.addEventListener('change', function() {
+    ilceSelect.innerHTML = '<option value="">İlçe Seçiniz</option>';
+    if (this.value && ilIlceVerileri[this.value]) {
+      ilIlceVerileri[this.value].sort().forEach(ilce => { const opt = document.createElement('option'); opt.value = ilce; opt.textContent = ilce; ilceSelect.appendChild(opt); });
+      ilceSelect.disabled = false;
+    } else { ilceSelect.disabled = true; }
+  });
+}
+
+function showToast(message, type = 'error') {
+  const existing = document.querySelector('.toast'); if (existing) existing.remove();
+  const toast = document.createElement('div'); toast.className = 'toast';
+  const colors = { error: 'var(--danger)', warning: 'var(--warning)', success: 'var(--success)' };
+  toast.style.background = colors[type] || colors.error; toast.textContent = message;
+  document.body.appendChild(toast); setTimeout(() => toast.remove(), 3000);
+}
+
+window.showSuccessModal = function() {
+  const overlay = document.createElement('div'); overlay.className = 'success-overlay';
+  overlay.innerHTML = `<div class="success-modal"><div class="success-icon">✓</div><h2 style="font-size:22px;font-weight:700;margin-bottom:12px;">Siparişiniz Alındı!</h2><p style="color:#475569;line-height:1.6;">Tebrikler! Müşteri temsilcimiz en kısa sürede WhatsApp üzerinden onay için iletişime geçecektir.</p><div style="margin-top:20px;color:#94a3b8;font-size:13px;">Bu ekran <span id="countdown">15</span> saniye içinde kapanacaktır...</div></div>`;
+  document.body.appendChild(overlay);
+  let c = 15; const int = setInterval(() => { c--; const el = document.getElementById('countdown'); if(el) el.innerText = c; if(c <= 0) clearInterval(int); }, 1000);
+};
+
+function calculateTotal() { return cart.reduce((t, i, idx) => t + ((idx > 0 && campaignSettings.active) ? campaignSettings.secondProductPrice : i.fiyat), 0); }
+
+function updateUI() {
+  const sticky = document.getElementById('sticky-bar'), btn = document.getElementById('sticky-checkout-btn'), order = document.getElementById('order-section'), count = document.getElementById('cart-count'), total = document.getElementById('total-price-display'), summary = document.getElementById('cart-items-summary'), subBtn = document.getElementById('submitBtn'), warn = document.getElementById('order-warning-banner');
+  const min = campaignSettings.minOrderCount || 2;
+  const hasMissing = cart.some(i => !i.secilenVaryant);
+  sticky.style.display = cart.length > 0 ? 'flex' : 'none';
+  order.classList.toggle('hidden', cart.length === 0);
+  if (cart.length === 0) { warn.className = 'warning-banner danger'; document.getElementById('warning-title').innerText = '⚠️ Ürün Seçimi Gerekli'; document.getElementById('warning-message').innerText = `Sipariş verebilmek için en az ${min} ürün seçin.`; subBtn.disabled = true; subBtn.classList.remove('active'); subBtn.innerText = `${min} ürün seçmeniz gerekiyor`; btn.classList.remove('active'); btn.innerText = 'Ürün Seçin'; window._hasAutoScrolledToForm = false; }
+  else if (cart.length < min) { warn.className = 'warning-banner danger'; document.getElementById('warning-title').innerText = '⚠️ Ürün Seçimi Eksik'; document.getElementById('warning-message').innerText = `En az ${min} ürün seçmelisiniz. ${min - cart.length} ürün daha ekleyin.`; subBtn.disabled = true; subBtn.classList.remove('active'); subBtn.innerText = `${min - cart.length} ürün daha seçmelisiniz`; btn.classList.remove('active'); btn.innerText = `${min - cart.length} Ürün Daha Seçin`; window._hasAutoScrolledToForm = false; }
+  else if (hasMissing) { warn.className = 'warning-banner warning'; document.getElementById('warning-title').innerText = '⚠️ Beden Seçimi Eksik'; document.getElementById('warning-message').innerText = 'Lütfen sepetteki ürünler için numara/beden seçimi yapın.'; subBtn.disabled = true; subBtn.classList.remove('active'); subBtn.innerText = '⚠️ Lütfen tüm seçimleri tamamlayın'; btn.classList.remove('active'); btn.innerText = 'Numara/Beden Seçin'; window._hasAutoScrolledToForm = false; }
+  else { warn.className = 'warning-banner success'; document.getElementById('warning-title').innerText = '✅ Siparişe Hazırsınız'; document.getElementById('warning-message').innerText = 'Tüm seçimler tamamlandı. Formu doldurarak siparişinizi onaylayabilirsiniz.'; subBtn.disabled = false; subBtn.classList.add('active'); subBtn.innerText = 'SİPARİŞİ ONAYLA'; btn.classList.add('active'); btn.innerText = 'Siparişi Tamamla'; if (!window._hasAutoScrolledToForm) { 
+      FacebookPixel.trackInitiateCheckout(cart, calculateTotal()); 
+      TikTokPixel.trackInitiateCheckout(cart, calculateTotal()); // TIKTOK INITIATE CHECKOUT TETİKLENİYOR
+      setTimeout(() => order.scrollIntoView({ behavior: 'smooth' }), 300); 
+      window._hasAutoScrolledToForm = true; 
+  } }
+  let tot = 0; summary.innerHTML = '';
+  cart.forEach((item, idx) => {
+    const price = (idx > 0 && campaignSettings.active) ? campaignSettings.secondProductPrice : item.fiyat; tot += price;
+    const errClass = (!item.secilenVaryant) ? "error" : "";
+    summary.innerHTML += `<div class="cart-item ${!item.secilenVaryant ? 'missing-variant' : ''}"><button onclick="window.removeFromCart(${item.cartId})" class="remove-btn">✕ Kaldır</button><img src="${item.resim}" alt="${item.isim}"><div style="flex:1;"><div style="font-weight:700;">${item.isim}</div><!--<div style="color:var(--primary); font-weight:800; margin:6px 0;">${price} ₺</div>--><select id="variant-${item.cartId}" class="variant-select ${errClass}" onchange="window.handleVariantChange(${item.cartId})"><option value="">Beden Seçiniz *</option>${(item.varyantlar||[]).map(v => `<option value="${v}" ${item.secilenVaryant===v?'selected':''}>${v}</option>`).join('')}</select><div class="variant-warning" style="display:${errClass?'flex':'none'}">⚠️ Lütfen beden seçin</div></div></div>`;
+  });
+  count.innerText = `${cart.length} ÜRÜN`; total.innerText = tot.toFixed(2) + ' ₺';
+}
+
+window.addToCart = (id, variant = '') => { 
+  const p = allProducts.find(x => x.id === id); 
+  if (!p) return; 
+  cart.push({ ...p, cartId: Date.now(), secilenVaryant: variant }); 
+  FacebookPixel.trackAddToCart(p); 
+  TikTokPixel.trackAddToCart(p); // TIKTOK ADD TO CART TETİKLENİYOR
+  updateUI(); 
+  showToast(`✓ ${p.isim} ${variant} numaralı ayakkabı sepete eklendi.`, 'success'); 
+};
+
+window.removeFromCart = (id) => { cart = cart.filter(x => x.cartId !== id); updateUI(); };
+window.handleVariantChange = (id) => { const el = document.getElementById(`variant-${id}`); const item = cart.find(x => x.cartId === id); if(item && el) item.secilenVaryant = el.value; updateUI(); };
+window.processStickyClick = () => { const min = campaignSettings.minOrderCount || 2; if(cart.length === 0) { showToast('⚠️ Lütfen önce ürün seçin', 'warning'); return; } if(cart.length < min) { showToast(`⚠️ En az ${min} ürün seçmelisiniz.`, 'warning'); return; } if(cart.some(i => !i.secilenVaryant)) { showToast('⚠️ Lütfen beden seçimlerini tamamlayın.', 'warning'); document.getElementById('order-section').scrollIntoView({ behavior: 'smooth' }); return; } document.getElementById('submitBtn').click(); };
+
+// Ürün Yükleme
+async function loadProducts() {
+  const q = await getDocs(collection(db, "products"));
+  document.getElementById('loading').style.display = 'none';
+  
+  const bestWrapper = document.getElementById('bestsellers-swiper-wrapper');
+  const allGrid = document.getElementById('all-products-grid');
+  
+  const prods = [];
+  q.forEach(docSnap => { 
+    const p = { id: docSnap.id, ...docSnap.data() }; 
+    if(p.aktif) prods.push(p); 
+  });
+  
+  // Tarihe göre sıralama
+  prods.sort((a,b) => (a.eklenmeTarihi?.toDate() || new Date(0)) - (b.eklenmeTarihi?.toDate() || new Date(0)));
+  allProducts = prods;
+  
+  // Performans ve Swiper DOM çökmesini önlemek için HTML'i değişkenlerde topluyoruz
+  let bestHtml = '';
+  let allHtml = '';
+  
+  prods.forEach((p, idx) => {
+// 1. Butonlara "w-full" eklendi (kendi hücresini tam doldurması için) ve "truncate" eklendi (yazı taşmasın diye)
+    const variants = (p.varyantlar || []).map(v => `<button type="button" onclick="event.stopPropagation(); window.addToCart('${p.id}', '${v}')" class="w-full py-1.5 px-1 text-xs font-bold bg-white border-2 border-blue-500 text-blue-600 hover:bg-blue-600 hover:text-white rounded-lg shadow-sm transition-all truncate">${v}</button>`).join('');
+    
+const card = `<div class="p-2 border border-mavi rounded-lg relative animasyonhover cursor-pointer group flex flex-col">
+      <img class="rounded-lg object-cover w-full lg:h-[300px] h-[140px] group-hover:scale-105 transition" src="${p.resim}" alt="${p.isim}" loading="lazy">
+      <div class="mt-2 w-full flex-1 flex flex-col justify-between">
+        <h3 class="font-semibold lg:text-base text-sm truncate">${p.isim}</h3>
+        <div class="mt-2 w-full">
+          <span class="block text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1.5 pl-0.5">${p.varyantAdi ? p.varyantAdi + ' Seç' : 'NUMARA SEÇİN'}</span>
+          <div class="grid grid-cols-2 gap-2">${variants}</div>
+        </div>
+      </div>
+      ${idx < 3 ? '<img class="lg:w-[50px] w-[40px] lg:h-[50px] h-[40px] absolute top-5 right-5" src="./view/img/firsat.png" alt="">' : ''}
+    </div>`;
+    
+    // Sadece ilk 8 ürünü slider'a ekle
+    if(idx < 8) {
+        bestHtml += `<div class="swiper-slide">${card}</div>`;
+        bestHtml += `<div class="swiper-slide">${card}</div>`;
+    }
+    
+    // Bütün ürünleri grid'e ekle
+    allHtml += card;
+  });
+  
+  // HTML yapılarını DOM'a TEK SEFERDE basıyoruz.
+  bestWrapper.innerHTML = bestHtml;
+  allGrid.innerHTML = allHtml;
+}
+
+// DİNAMİK KAMPANYA BANNER AYARLARI
+async function loadDynamicBanner() {
+  try {
+    // Site ayarlarından
+    if (window._siteSettings) {
+      const s = window._siteSettings;
+      if (s.campaignTitle) document.getElementById('dynamicCampaignTitle').innerText = s.campaignTitle;
+      if (s.campaignSubtitle) document.getElementById('dynamicCampaignSubtitle').innerText = s.campaignSubtitle;
+      if (s.campaignDesc) document.getElementById('dynamicCampaignDesc').innerText = s.campaignDesc;
+      if (s.heroBannerUrl) document.getElementById('heroBannerBg').style.backgroundImage = `url('${s.heroBannerUrl}')`;
+    }
+    
+    // Kampanya ayarlarından
+    const campDoc = await getDoc(doc(db, "settings", "campaign"));
+    if (campDoc.exists()) {
+      campaignSettings = { ...campaignSettings, ...campDoc.data() };
+      if (!campaignSettings.minOrderCount) campaignSettings.minOrderCount = 2;
+      if (campaignSettings.active) {
+        if (campaignSettings.message) document.getElementById('dynamicCampaignTitle').innerText = campaignSettings.message;
+        if (campaignSettings.subtitleMessage) document.getElementById('dynamicCampaignSubtitle').innerText = campaignSettings.subtitleMessage;
+        if (campaignSettings.description) document.getElementById('dynamicCampaignDesc').innerText = campaignSettings.description;
+      }
+    }
+  } catch(e) {}
+}
+
+// Sipariş Gönderme
+// Sipariş Gönderme
+document.getElementById('orderForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  // TELEFON NUMARASI DOĞRULAMASI EKLENDİ
+  const telInput = document.getElementById('telefon').value;
+  if (telInput.length !== 11 || !telInput.startsWith('05')) {
+    showToast('⚠️ Lütfen 05 ile başlayan 11 haneli geçerli bir numara girin.', 'error');
+    return;
+  }
+
+  if(cart.some(i => !i.secilenVaryant)) { showToast('⚠️ Tüm ürünler için beden seçin', 'error'); return; }
+  const btn = document.getElementById('submitBtn'); btn.disabled = true; btn.innerText = "⏳ İŞLENİYOR...";
+  try {
+    const ip = await (await fetch('https://api.ipify.org?format=json')).json(); userData.ip = ip.ip;
+    const ref = await addDoc(collection(db, "orders"), {
+      musteri: { adSoyad: document.getElementById('adSoyad').value, tel: document.getElementById('telefon').value, il: document.getElementById('il').value, ilce: document.getElementById('ilce').value, adres: document.getElementById('adres').value, mesaj: document.getElementById('mesaj').value },
+      urunler: cart.map(i => ({ id: i.id, isim: i.isim, varyant: i.secilenVaryant })),
+      toplamTutar: calculateTotal().toFixed(2) + ' ₺', ip: ip.ip, tarih: serverTimestamp(), durum: 'yeni', kaynakSite: window.location.hostname
+    });
+    
+    FacebookPixel.trackPurchase(ref.id, cart, calculateTotal(), { phone: document.getElementById('telefon').value, firstName: document.getElementById('adSoyad').value.split(' ')[0] });
+    TikTokPixel.trackCompletePayment(ref.id, cart, calculateTotal()); // TIKTOK COMPLETE PAYMENT TETİKLENİYOR
+    
+    window.showSuccessModal(); setTimeout(() => location.reload(), 15000);
+  } catch(err) { showToast('❌ Hata: ' + err.message, 'error'); btn.disabled = false; btn.innerText = 'SİPARİŞİ ONAYLA'; }
+});
+
+// Başlatma
+async function init() {
+  try {
+    window.AKTIF_DOMAIN = window.location.hostname;
+    
+    try { 
+      userData.ip = (await fetch('https://api.ipify.org?format=json')).json().ip; 
+    } catch(e) {
+      console.log("IP alınamadı:", e);
+    }
+    
+    await loadDynamicBanner();
+    initIlIlceSelectors();
+    await loadProducts();
+    updateReviewDisplay();
+    
+    // Swiper Ayarları (Yan yana 5 ürün çıkacak şekilde güncellendi)
+    if(typeof Swiper !== 'undefined') { 
+      if(window.swiper) {
+          window.swiper.destroy(true, true);
+      }
+      window.swiper = new Swiper(".mySwiper3", { 
+        slidesPerView: 2, 
+        spaceBetween: 10, 
+        // Otomatik kaydırma ayarları eklendi
+        autoplay: {
+          delay: 2000, // 2000 milisaniye = 2 saniye
+          disableOnInteraction: false // Kullanıcı ekrana dokunup bıraktığında durmaması için
+        },
+        pagination: { 
+          el: ".swiper-pagination", 
+          clickable: true 
+        }, 
+        breakpoints: { 
+          320: { slidesPerView: 2, spaceBetween: 10 }, 
+          640: { slidesPerView: 3, spaceBetween: 15 }, 
+          768: { slidesPerView: 4, spaceBetween: 20 }, 
+          1024: { slidesPerView: 5, spaceBetween: 20 }
+        } 
+      }); 
+    }
+    
+  } catch(err) { 
+    console.error("Init hatası:", err); 
+  }
+}
+init();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="./view/js/main.js"></script>
+<script>
+function startCountdown(dakika) { let targetTime; let stored = localStorage.getItem("countdownEndTime"); if(stored) targetTime = parseInt(stored); else { targetTime = Date.now() + (dakika || 1294) * 60 * 1000; localStorage.setItem("countdownEndTime", targetTime); } function update() { let rem = targetTime - Date.now(); if(rem <= 0) { document.getElementById("hours").textContent = "00"; document.getElementById("minutes").textContent = "00"; document.getElementById("seconds").textContent = "00"; localStorage.removeItem("countdownEndTime"); clearInterval(int); return; } document.getElementById("hours").textContent = String(Math.floor(rem / 3600000)).padStart(2,'0'); document.getElementById("minutes").textContent = String(Math.floor((rem % 3600000) / 60000)).padStart(2,'0'); document.getElementById("seconds").textContent = String(Math.floor((rem % 60000) / 1000)).padStart(2,'0'); } update(); let int = setInterval(update, 1000); } startCountdown(localStorage.getItem("countdownEndTime") ? 0 : 1294);
+</script>
+</body>
+</html>
