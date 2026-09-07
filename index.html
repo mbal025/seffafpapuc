@@ -14,11 +14,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<!-- Tailwind CSS (Eğer harici yüklenmiyorsa CDN üzerinden destek) -->
+<script src="https://cdn.tailwindcss.com"></script>
 
-<!-- Firebase & Dinamik Pixel Script -->
+<!-- Firebase & Dinamik Pixel Script (Gelişmiş Referans Sistemli) -->
 <script>
 let FB_PIXEL_ID = '';
-let TT_PIXEL_ID = ''; // TIKTOK ID DEĞİŞKENİ EKLENDİ
+let TT_PIXEL_ID = '';
 
 window.addEventListener('DOMContentLoaded', async () => {
   try {
@@ -39,9 +41,14 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (settingsDoc.exists()) {
       const settings = settingsDoc.data();
       
+      const dynamicFbId = settings.facebookPixelId || settings['cfg-facebookPixelId'];
+      if (dynamicFbId) FB_PIXEL_ID = dynamicFbId;
+      
+      const dynamicTtId = settings.tiktokPixelId || settings['cfg-tiktokPixelId'];
+      if (dynamicTtId) window.TT_PIXEL_ID = dynamicTtId;
+
       // FACEBOOK PIXEL KURULUMU
-      if (settings.facebookPixelId) {
-        FB_PIXEL_ID = settings.facebookPixelId;
+      if (FB_PIXEL_ID) {
         const noscriptEl = document.getElementById('fb-noscript');
         if (noscriptEl) {
           const imgEl = document.createElement('img');
@@ -56,12 +63,11 @@ window.addEventListener('DOMContentLoaded', async () => {
       }
 
       // TIKTOK PIXEL KURULUMU
-      if (settings.tiktokPixelId) {
-        TT_PIXEL_ID = settings.tiktokPixelId;
+      if (window.TT_PIXEL_ID) {
         !function (w, d, t) {
           w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
         }(window, document, 'ttq');
-        ttq.load(TT_PIXEL_ID);
+        ttq.load(window.TT_PIXEL_ID);
         ttq.page(); // PageView Tetikleyici
       }
 
@@ -91,7 +97,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   .cart-item { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; gap: 12px; margin-bottom: 12px; position: relative; }
   .cart-item.missing-variant { border-color: var(--danger); background: #fef2f2; }
   .cart-item img { width: 70px; height: 70px; object-fit: cover; border-radius: 6px; }
-  .remove-btn { position: absolute; top: 8px; right: 8px; background: #fee2e2; color: #991b1b; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; }
+  .remove-btn { position: absolute; top: 8px; right: 8px; background: #fee2e2; color: #991b1b; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; z-index:10; }
   .variant-select { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; margin-top: 6px; }
   .variant-select.error { border-color: var(--danger); background: #fef2f2; }
   .variant-warning { display: flex; align-items: center; gap: 6px; color: var(--danger); font-size: 12px; margin-top: 4px; }
@@ -100,14 +106,11 @@ window.addEventListener('DOMContentLoaded', async () => {
   .btn-submit:hover.active { background: #1d4ed8; }
   .custom-input, .custom-select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; font-family: inherit; }
   .info-box { background: #e0f2fe; padding: 12px; border-radius: 8px; font-size: 13px; line-height: 1.5; margin: 16px 0; border: 1px solid #bae6fd; }
-  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 999999; animation: slideUp 0.3s ease; }
-  @keyframes slideUp { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 999999; animation: slideDown 0.3s ease; }
+  @keyframes slideDown { from { opacity: 0; transform: translate(-50%, -20px); } to { opacity: 1; transform: translate(-50%, 0); } }
   .success-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 999999; }
   .success-modal { background: #fff; padding: 30px; border-radius: 16px; text-align: center; max-width: 400px; }
   .success-icon { width: 60px; height: 60px; background: #10b981; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 15px; }
-  .lightbox-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 999999; display: flex; align-items: center; justify-content: center; padding: 20px; }
-  .lightbox-content { background: #fff; padding: 20px; border-radius: 12px; max-width: 500px; width: 100%; position: relative; }
-  .lightbox-close { position: absolute; top: 10px; right: 10px; background: #f1f5f9; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }
   .review-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: opacity 0.4s, transform 0.4s; max-width: 500px; margin: 0 auto; }
   .review-header { display: flex; gap: 14px; align-items: center; margin-bottom: 12px; }
   .review-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #e2e8f0; }
@@ -188,7 +191,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   <div class="swiper mySwiper">
     <div class="swiper-wrapper">
       <div class="swiper-slide"><p class="text-center text-beyaz font-semibold lg:text-base text-xs">Kapıda Ödeme ve Şeffaf Kargo Güvencesi</p></div>
-      <div class="swiper-slide"><p class="text-center text-beyaz font-semibold lg:text-base text-xs">2 Ürün Sadece 1.250₺</p></div>
+      <div class="swiper-slide"><p class="text-center text-beyaz font-semibold lg:text-base text-xs">3 Ürün Sadece 1.250₺</p></div>
       <div class="swiper-slide"><p class="text-center text-beyaz font-semibold lg:text-base text-xs">Ücretsiz Kargo</p></div>
     </div>
   </div>
@@ -232,7 +235,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     <div style="background-image: url('../../view/images/67cbaca531250_banner1.jpg');" class="bg-cover bg-no-repeat lg:h-[300px] relative rounded-lg" id="heroBannerBg">
       <div class="absolute inset-0 bg-black/50 rounded-lg"></div>
       <div class="flex flex-col items-center justify-center gap-4 py-4 lg:py-0 h-full relative z-50" id="hero-dynamic-content">
-        <div class="bg-mavi p-2 text-beyaz lg:text-2xl text-base font-bold"><p id="dynamicCampaignTitle">2 AYAKKABI SADECE 1.250 TL</p></div>
+        <div class="bg-mavi p-2 text-beyaz lg:text-2xl text-base font-bold"><p id="dynamicCampaignTitle">3 AYAKKABI SADECE 1.250 TL</p></div>
         <p class="text-beyaz lg:text-xl text-base font-bold" id="dynamicCampaignSubtitle">ÜSTELİK ÜCRETSİZ ŞEFFAF KARGO!</p>
         <p class="text-beyaz lg:text-sm text-xs" id="dynamicCampaignDesc"></p>
         <div class="text-center text-beyaz rounded-2xl shadow-lg">
@@ -281,7 +284,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   </div>
 </div>
 
-<!-- ✅ Müşteri Yorumları (İlk HTML'den) -->
+<!-- Müşteri Yorumları 
 <section class="reviews-section container mx-auto py-10 px-5 lg:px-0">
   <div class="text-center mb-8">
     <h2 class="text-3xl font-bold text-mavi mb-2">Müşterilerimiz Ne Diyor?</h2>
@@ -291,7 +294,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     <div id="review-container" class="review-card"></div>
     <div style="display:flex; justify-content:center; gap:8px; margin-top:20px;" id="review-dots"></div>
   </div>
-</section>
+</section> -->
 
 <!-- SSS -->
 <section class="faq-section container mx-auto py-10 px-5 lg:px-0">
@@ -307,27 +310,44 @@ window.addEventListener('DOMContentLoaded', async () => {
   <div class="max-w-3xl mx-auto px-4">
     <h2 class="font-serif text-3xl font-bold mb-4">Sipariş Bilgileri</h2>
     <div id="order-warning-banner" class="warning-banner danger">
-      <div class="warning-icon">⚠️</div>
+      <div class="warning-icon text-xl" id="warning-icon">⚠️</div>
       <div class="warning-content">
-        <h4 id="warning-title">Ürün Seçimi Gerekli</h4>
-        <p id="warning-message">Sipariş verebilmek için lütfen yukarıdan en az 2 ürün seçin.</p>
+        <h4 id="warning-title" class="font-bold">Ürün Seçimi Gerekli</h4>
+        <p id="warning-message" class="text-sm">Sipariş verebilmek için lütfen ürün seçin.</p>
       </div>
     </div>
-    <div id="cart-items-summary" style="margin-bottom: 24px;"></div>
+    
+    <div id="cart-items-summary" style="margin-bottom: 24px; display: flex; flex-direction: column; gap: 12px;"></div>
+    
     <form id="orderForm">
-      <div class="input-group"><label>Ad Soyad *</label><input class="custom-input" type="text" id="adSoyad" placeholder="Adınız ve soyadınız" required></div>
-<div class="input-group">
-          <label>Telefon Numarası *</label>
-          <input class="custom-input" type="tel" id="telefon" placeholder="05XX XXX XX XX" oninput="let v = this.value.replace(/[^0-9]/g, ''); if(v.startsWith('905')) v = '0' + v.substring(2); else if(v.startsWith('5')) v = '0' + v; else if(v.length > 0 && !v.startsWith('0')) v = '0' + v; this.value = v.substring(0, 11);" required>
-        </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div class="input-group"><label>İl *</label><select class="custom-select" id="il" required><option value="">İl Seçiniz</option></select></div>
-        <div class="input-group"><label>İlçe *</label><select class="custom-select" id="ilce" required disabled><option value="">Önce il seçiniz</option></select></div>
+      <div class="input-group">
+        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Ad Soyad *</label>
+        <input class="custom-input" type="text" id="adSoyad" placeholder="Adınız ve soyadınız" maxlength="50" required>
       </div>
-      <div class="input-group"><label>Açık Adres *</label><textarea class="custom-input" id="adres" placeholder="Mahalle, sokak, bina no, daire no..." required rows="3"></textarea></div>
-      <div class="input-group"><label>Not (opsiyonel)</label><input class="custom-input" type="text" id="mesaj" placeholder="Örn: Kapı zili arızalı"></div>
-      <div class="info-box">⚠️ <strong class="text-primary">Sipariş Ver</strong> butonuna bastığınızda siparişiniz oluşturulur.<br>📲 Onay için müşteri temsilcimiz WhatsApp üzerinden iletişime geçecektir.<br>🚚 <strong class="text-accent">Önemli Uyarı</strong>: ARAS KARGO ile çalışıyoruz. Köylere, askeriye ve inşaatlara ARAS KARGO gönderim yapmamaktadır.</div>
-      <button type="submit" id="submitBtn" class="btn-submit" disabled>2 ürün seçmeniz gerekiyor</button>
+      <div class="input-group">
+        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Telefon Numarası *</label>
+        <input class="custom-input" type="tel" id="telefon" placeholder="05XX XXX XX XX" maxlength="11" required>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="input-group">
+          <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">İl *</label>
+          <select class="custom-select" id="il" required><option value="">İl Seçiniz</option></select>
+        </div>
+        <div class="input-group">
+          <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">İlçe *</label>
+          <select class="custom-select" id="ilce" required disabled><option value="">Önce il seçiniz</option></select>
+        </div>
+      </div>
+      <div class="input-group">
+        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Açık Adres *</label>
+        <textarea class="custom-input" id="adres" placeholder="Mahalle, sokak, bina no, daire no..." minlength="10" maxlength="300" required rows="3"></textarea>
+      </div>
+      <div class="input-group">
+        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Not (opsiyonel)</label>
+        <input class="custom-input" type="text" id="mesaj" maxlength="100" placeholder="Örn: Kapı zili arızalı">
+      </div>
+      <div class="info-box">⚠️ <strong class="text-primary">Sipariş Ver</strong> butonuna bastığınızda siparişiniz oluşturulur.<br>📲 Onay için müşteri temsilcimiz WhatsApp üzerinden iletişime geçecektir.<br>🚚 <strong class="text-red-600">Önemli Uyarı</strong>: ARAS KARGO ile çalışıyoruz. Köylere, askeriye ve inşaatlara ARAS KARGO gönderim yapmamaktadır.</div>
+      <button type="submit" id="submitBtn" class="btn-submit" disabled>Ürün seçmeniz gerekiyor</button>
     </form>
   </div>
 </section>
@@ -369,68 +389,123 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig, 'mainApp');
 const db = getFirestore(app);
 
+// Gelişmiş Ziyaretçi Takip Fonksiyonu
+async function trackVisitor() {
+    if (sessionStorage.getItem('ziyaretci_kaydedildi')) return;
+    const params = new URLSearchParams(window.location.search);
+    ['utm_source', 'utm_campaign', 'utm_medium', 'utm_id', 'ttclid', 'fbclid'].forEach(k => {
+        if (params.get(k)) sessionStorage.setItem(k, params.get(k));
+    });
+    try {
+        let ip = 'Bilinmiyor', country = '', city = '';
+        try { ip = (await (await fetch('https://api.ipify.org?format=json')).json()).ip; } catch(e){}
+        try { 
+            const geo = await (await fetch('https://ipapi.co/json/')).json();
+            country = geo.country_name || geo.country || ''; city = geo.city || '';
+        } catch(e){}
+        const visitorData = {
+            girisSaati: serverTimestamp(), ip,
+            utm_source: params.get('utm_source') || sessionStorage.getItem('utm_source'),
+            ttclid: params.get('ttclid') || sessionStorage.getItem('ttclid'),
+            fbclid: params.get('fbclid') || sessionStorage.getItem('fbclid'),
+            referer: document.referrer || '',
+            cihaz: navigator.platform || null, tarayici: navigator.userAgent || null, ulke: country, sehir: city
+        };
+        const docRef = await addDoc(collection(db, 'visitors'), visitorData);
+        localStorage.setItem('visitorId', docRef.id);
+        sessionStorage.setItem('ziyaretci_kaydedildi', 'true'); 
+    } catch (err) {}
+}
+
 let cart = [];
 let allProducts = [];
-let campaignSettings = { active: false, secondProductPrice: 0, message: "", minOrderCount: 2 };
-let userData = {};
+let campaignSettings = { active: false, secondProductPrice: 0, message: "", minOrderCount: 2, cargoActive: false, cargoPrice: 0, maxOrderCount: 5 };
 window._hasAutoScrolledToForm = false;
 
-// FACEBOOK PIXEL FONKSİYONLARI
+function getPriceForItem(item, index) {
+  const secondPrice = Number(campaignSettings && campaignSettings.secondProductPrice);
+  const useSecond = campaignSettings && campaignSettings.active && isFinite(secondPrice) && secondPrice > 0 && index > 0;
+  const base = Number(item && item.fiyat);
+  return useSecond ? secondPrice : (isFinite(base) ? base : 0);
+}
+
+function calculateTotal() {
+  let total = cart.reduce((t, item, i) => t + getPriceForItem(item, i), 0);
+  if (cart.length > 0 && campaignSettings && campaignSettings.cargoActive && Number(campaignSettings.cargoPrice) > 0) total += Number(campaignSettings.cargoPrice);
+  return total;
+}
+
+// Gelişmiş Validasyon
+function sanitizeInput(input) { return input ? input.replace(/<[^>]*>/g, '').trim() : ''; }
+function isValidName(input) { return /^[a-zA-ZğĞüÜşŞıİöÖçÇ\s]+$/.test(input) && input.length >= 3; }
+function isValidPhone(input) { return /^\d+$/.test(input) && input.length === 11 && input.startsWith('05'); }
+
+function setupValidationListeners() {
+  ['adSoyad', 'telefon', 'adres', 'mesaj'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el && id==='adSoyad') el.addEventListener('input', function() { this.value = this.value.replace(/[^a-zA-ZğĞüÜşŞıİöÖçÇ\s]/g, '').substring(0, 50).replace(/\s+/g, ' '); });
+    if(el && id==='telefon') el.addEventListener('input', function() {
+        let v = this.value.replace(/[^0-9]/g, '');
+        if (v.startsWith('905')) v = '0' + v.substring(2); else if (v.startsWith('5')) v = '0' + v; else if (v.length > 0 && !v.startsWith('0')) v = '0' + v;
+        this.value = v.substring(0, 11);
+    });
+  });
+}
+
+// Gelişmiş Pixel Fonksiyonları
 const FacebookPixel = {
-  track(eventName, params = {}, eventId = null) { if(typeof fbq==='function') fbq('track', eventName, params, eventId?{eventID:eventId}:{}); },
-  trackAddToCart(p) { this.track('AddToCart', { content_name: p.isim, content_ids: [p.id], content_type: 'product', value: p.fiyat, currency: 'TRY' }); },
-  trackInitiateCheckout(items, total) {
-    const c = items.map((item, i) => ({ id: item.id, quantity: 1, item_price: (i>0&&campaignSettings.active)?campaignSettings.secondProductPrice:item.fiyat, name: item.isim }));
-    this.track('InitiateCheckout', { content_ids: items.map(i=>i.id), contents: c, content_type: 'product', value: total, currency: 'TRY', num_items: items.length });
-  },
-  trackPurchase(oid, items, total, cust={}) {
-    const c = items.map((item, i) => ({ id: item.id, quantity: 1, item_price: (i>0&&campaignSettings.active)?campaignSettings.secondProductPrice:item.fiyat, name: item.isim }));
-    const p = { content_type: 'product', contents: c, content_ids: items.map(i=>i.id), value: total, currency: 'TRY', num_items: items.length, order_id: oid };
-    if(cust.phone) p.ph = cust.phone;
-    if(cust.firstName) p.fn = cust.firstName;
-    this.track('Purchase', p, oid);
+  track(eventName, params = {}, eventId = null) { if (typeof fbq === 'function') fbq('track', eventName, params, eventId ? { eventID: eventId } : undefined); },
+  trackAddToCart(product) { this.track('AddToCart', { content_name: product.isim, content_ids: [product.id], content_type: 'product', value: product.fiyat, currency: 'TRY', contents: [{ id: product.id, quantity: 1, item_price: product.fiyat }] }); },
+  trackInitiateCheckout(cartItems, totalValue) { this.track('InitiateCheckout', { content_ids: cartItems.map(item => item.id), contents: cartItems.map((item, index) => ({ id: item.id, quantity: 1, item_price: getPriceForItem(item, index) })), content_type: 'product', value: totalValue, currency: 'TRY', num_items: cartItems.length }); },
+  trackPurchase(orderId, cartItems, totalValue, customerInfo = {}) {
+    if (typeof fbq === 'function' && Object.keys(customerInfo).length > 0) fbq('set', 'userData', { ph: customerInfo.phone, fn: customerInfo.firstName, ln: customerInfo.lastName, ct: customerInfo.city }, FB_PIXEL_ID);
+    this.track('Purchase', { content_type: 'product', contents: cartItems.map((item, index) => ({ id: item.id, quantity: 1, item_price: getPriceForItem(item, index) })), content_ids: cartItems.map(item => item.id), value: totalValue, currency: 'TRY', num_items: cartItems.length }, orderId);
   }
 };
 
-// TIKTOK PIXEL FONKSİYONLARI (YENİ EKLENDİ)
 const TikTokPixel = {
-  track(eventName, params = {}) { if(typeof ttq !== 'undefined') ttq.track(eventName, params); },
-  trackAddToCart(p) { 
-    this.track('AddToCart', { content_id: p.id, content_type: 'product', content_name: p.isim, value: p.fiyat, currency: 'TRY' }); 
-  },
-  trackInitiateCheckout(items, total) {
-    const c = items.map((item, i) => ({ content_id: item.id, quantity: 1, price: (i>0&&campaignSettings.active)?campaignSettings.secondProductPrice:item.fiyat, content_name: item.isim }));
-    this.track('InitiateCheckout', { contents: c, content_type: 'product', value: total, currency: 'TRY' });
-  },
-  trackCompletePayment(oid, items, total) {
-    const c = items.map((item, i) => ({ content_id: item.id, quantity: 1, price: (i>0&&campaignSettings.active)?campaignSettings.secondProductPrice:item.fiyat, content_name: item.isim }));
-    this.track('CompletePayment', { contents: c, content_type: 'product', value: total, currency: 'TRY', order_id: oid });
-  }
+  track(e, p={}, id=null){ if (typeof ttq!=='undefined') ttq.track(e,p, id ? {event_id:id} : {}); },
+  trackAddToCart(pr){ this.track('AddToCart', {content_id: String(pr.id), content_type: 'product', value: Number(pr.fiyat), currency: 'TRY'}); },
+  trackInitiateCheckout(ci, tv){ this.track('InitiateCheckout', {content_id: String(ci[0].id), content_type: 'product', value: Number(tv), currency: 'TRY'}); },
+  trackCompletePayment(oid, ci, tv, info={}){ this.track('CompletePayment', {content_id: String(ci[0].id), content_type: 'product', value: Number(tv), currency: 'TRY'}, oid); }
 };
 
-// ✅ İLK HTML'DEN ALINAN 10 YORUM
-const reviews = [
-  { name: "Kerem Yılmaz", avatar: "https://i.pravatar.cc/100?img=11", date: "1 gün önce", stars: 5, text: "1500 TL'ye bu kalitede ayakkabı bulmak imkansız dediler, ama gerçekten harika. 2 günde kargolandı, paketleme bile premium seviyedeydi." },
-  { name: "Sibel Demirci", avatar: "https://i.pravatar.cc/100?img=5", date: "1 hafta önce", stars: 5, text: "Kampanyadan 2 ayakkabı aldım, ikisi de birbirinden kaliteli. Renkler tam fotodaki gibi, dikişler sapasağlam. Bu fiyata böyle ürün gerçekten büyük fırsat." },
-  { name: "Onur Karadağ", avatar: "https://i.pravatar.cc/100?img=12", date: "3 gün önce", stars: 5, text: "Kumaşın yumuşaklığı, baskı kalitesi gerçekten 1250 TL bandında beklenmeyecek düzeyde. Yaz için ideal olmuş. Kesinlikle tavsiye ederim." },
-  { name: "Büşra Akkaya", avatar: "https://i.pravatar.cc/100?img=9", date: "5 gün önce", stars: 5, text: "Kapıda ödeme ile sipariş verdim, ayakkabılar elime ulaşmadan paketi açıp kontrol ettim. Kalite tam istediğim gibi. 10 üzerinden 10!" },
-  { name: "Caner Taşkın", avatar: "https://i.pravatar.cc/100?img=15", date: "1 gün önce", stars: 5, text: "Siparişim ertesi gün elime geçti. Ayakkabının rengi ve modeli fotoğraflardakinin aynısı, hatta canlıda daha güzel duruyor. Kaçırmayın." },
-  { name: "Ebru Sever", avatar: "https://i.pravatar.cc/100?img=23", date: "4 gün önce", stars: 5, text: "Bir ayakkabıyı beden uymadığı için iade ettim, süreç çok sorunsuz ilerledi. WhatsApp'tan anında dönüş yapıp yenisini gönderdiler." },
-  { name: "Volkan Keskin", avatar: "https://i.pravatar.cc/100?img=33", date: "6 gün önce", stars: 4, text: "Ayakkabı kalitesi fiyatına göre çok iyi, yumuşacık. Sadece kargo biraz gecikti, onun dışında üründen çok memnunum." },
-  { name: "Gamze Erdoğan", avatar: "https://i.pravatar.cc/100?img=44", date: "2 hafta önce", stars: 5, text: "Arkadaşıma doğum günü hediyesi olarak aldım, paketleme o kadar şıktı ki ekstra hediye paketi yaptırmama gerek kalmadı." },
-  { name: "Umut Çakmak", avatar: "https://i.pravatar.cc/100?img=52", date: "3 gün önce", stars: 5, text: "Beden kalıbı tam oturdu, ne bol ne dar. Bu fiyata bu performans müthiş. İkinci siparişimi az önce verdim." },
-  { name: "Pelin Şentürk", avatar: "https://i.pravatar.cc/100?img=61", date: "1 hafta önce", stars: 5, text: "Canlı destekten beden tavsiyesi aldım, çok yardımcı oldular. Ayakkabı tam anlatıldığı gibi geldi. Fiyat performans şampiyonu." }
+// Yorum Sistemi
+let reviews = [
+  { name: "Kerem Yılmaz", avatar: "https://i.pravatar.cc/100?img=11", date: "1 gün önce", stars: 5, text: "Gerçekten harika. 2 günde kargolandı, paketleme bile premium seviyedeydi." },
+  { name: "Sibel Demirci", avatar: "https://i.pravatar.cc/100?img=5", date: "1 hafta önce", stars: 5, text: "Kaliteli ve dikişleri sapasağlam. Bu fiyata böyle ürün gerçekten büyük fırsat." },
+  { name: "Onur Karadağ", avatar: "https://i.pravatar.cc/100?img=12", date: "3 gün önce", stars: 5, text: "Yumuşaklığı, kalitesi gerçekten beklenmeyecek düzeyde. Kesinlikle tavsiye ederim." }
 ];
 let currentReviewIndex = 0;
 
+async function loadReviewsFromDB() {
+  try {
+    const snapshot = await getDocs(collection(db, "reviews"));
+    let dbReviews = [];
+    snapshot.forEach(docSnap => dbReviews.push({ id: docSnap.id, ...docSnap.data() }));
+    if (dbReviews.length > 0) {
+       reviews = dbReviews.map(r => ({
+          name: r.name,
+          avatar: r.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(r.name)}&background=random&color=fff`,
+          date: r.dateText || "Yakın zamanda",
+          stars: r.stars || 5,
+          text: r.text
+       }));
+    }
+    for (let i = reviews.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [reviews[i], reviews[j]] = [reviews[j], reviews[i]]; }
+    updateReviewDisplay();
+  } catch (error) {}
+}
+
 function updateReviewDisplay() {
   const r = reviews[currentReviewIndex];
+  if (!r) return;
   document.getElementById('review-container').style.opacity = '0';
   document.getElementById('review-container').style.transform = 'translateY(8px)';
   setTimeout(() => {
     document.getElementById('review-container').innerHTML = `
       <div class="review-header">
-        <img src="${r.avatar}" alt="${r.name}" class="review-avatar" onerror="this.src='https://i.pravatar.cc/100?u=${r.name}'">
+        <img src="${r.avatar}" alt="${r.name}" class="review-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(r.name)}&background=random&color=fff'">
         <div>
           <div class="review-username">${r.name} <span class="verified-badge">✓ Doğrulanmış Alışveriş</span></div>
           <div style="font-size:11px; color:#94a3b8; margin-top:2px;">${r.date}</div>
@@ -440,14 +515,10 @@ function updateReviewDisplay() {
       <div class="review-text">"${r.text}"</div>`;
     document.getElementById('review-container').style.opacity = '1';
     document.getElementById('review-container').style.transform = 'translateY(0)';
-    renderReviewDots();
+    document.getElementById('review-dots').innerHTML = reviews.map((_, i) => 
+      `<span style="width:10px;height:10px;border-radius:50%;background:${i===currentReviewIndex?'#2563eb':'#e2e8f0'};cursor:pointer;transition:0.3s;" onclick="window._goReview(${i})"></span>`
+    ).join('');
   }, 250);
-}
-
-function renderReviewDots() {
-  document.getElementById('review-dots').innerHTML = reviews.map((_, i) => 
-    `<span style="width:10px;height:10px;border-radius:50%;background:${i===currentReviewIndex?'#2563eb':'#e2e8f0'};cursor:pointer;transition:0.3s;" onclick="window._goReview(${i})"></span>`
-  ).join('');
 }
 window._goReview = (i) => { currentReviewIndex = i; updateReviewDisplay(); };
 setInterval(() => { currentReviewIndex = (currentReviewIndex + 1) % reviews.length; updateReviewDisplay(); }, 5000);
@@ -565,47 +636,113 @@ window.showSuccessModal = function() {
   let c = 15; const int = setInterval(() => { c--; const el = document.getElementById('countdown'); if(el) el.innerText = c; if(c <= 0) clearInterval(int); }, 1000);
 };
 
-function calculateTotal() { return cart.reduce((t, i, idx) => t + ((idx > 0 && campaignSettings.active) ? campaignSettings.secondProductPrice : i.fiyat), 0); }
-
+// Gelişmiş Arayüz ve Sepet Güncellemeleri
 function updateUI() {
   const sticky = document.getElementById('sticky-bar'), btn = document.getElementById('sticky-checkout-btn'), order = document.getElementById('order-section'), count = document.getElementById('cart-count'), total = document.getElementById('total-price-display'), summary = document.getElementById('cart-items-summary'), subBtn = document.getElementById('submitBtn'), warn = document.getElementById('order-warning-banner');
-  const min = campaignSettings.minOrderCount || 2;
-  const hasMissing = cart.some(i => !i.secilenVaryant);
+  const min = campaignSettings.minOrderCount || 1;
+  const max = campaignSettings.maxOrderCount || 5;
+
+  const hasMissing = cart.some(i => {
+    let vGroups = i.cokluVaryantlar; if (!vGroups || vGroups.length === 0) vGroups = [{ ad: i.varyantAdi || 'Beden', secenekler: i.varyantlar || [] }];
+    for (let g of vGroups) { if (!i.secilenVaryantlar || !i.secilenVaryantlar[g.ad]) return true; } return false;
+  });
+
   sticky.style.display = cart.length > 0 ? 'flex' : 'none';
   order.classList.toggle('hidden', cart.length === 0);
-  if (cart.length === 0) { warn.className = 'warning-banner danger'; document.getElementById('warning-title').innerText = '⚠️ Ürün Seçimi Gerekli'; document.getElementById('warning-message').innerText = `Sipariş verebilmek için en az ${min} ürün seçin.`; subBtn.disabled = true; subBtn.classList.remove('active'); subBtn.innerText = `${min} ürün seçmeniz gerekiyor`; btn.classList.remove('active'); btn.innerText = 'Ürün Seçin'; window._hasAutoScrolledToForm = false; }
-  else if (cart.length < min) { warn.className = 'warning-banner danger'; document.getElementById('warning-title').innerText = '⚠️ Ürün Seçimi Eksik'; document.getElementById('warning-message').innerText = `En az ${min} ürün seçmelisiniz. ${min - cart.length} ürün daha ekleyin.`; subBtn.disabled = true; subBtn.classList.remove('active'); subBtn.innerText = `${min - cart.length} ürün daha seçmelisiniz`; btn.classList.remove('active'); btn.innerText = `${min - cart.length} Ürün Daha Seçin`; window._hasAutoScrolledToForm = false; }
-  else if (hasMissing) { warn.className = 'warning-banner warning'; document.getElementById('warning-title').innerText = '⚠️ Beden Seçimi Eksik'; document.getElementById('warning-message').innerText = 'Lütfen sepetteki ürünler için numara/beden seçimi yapın.'; subBtn.disabled = true; subBtn.classList.remove('active'); subBtn.innerText = '⚠️ Lütfen tüm seçimleri tamamlayın'; btn.classList.remove('active'); btn.innerText = 'Numara/Beden Seçin'; window._hasAutoScrolledToForm = false; }
-  else { warn.className = 'warning-banner success'; document.getElementById('warning-title').innerText = '✅ Siparişe Hazırsınız'; document.getElementById('warning-message').innerText = 'Tüm seçimler tamamlandı. Formu doldurarak siparişinizi onaylayabilirsiniz.'; subBtn.disabled = false; subBtn.classList.add('active'); subBtn.innerText = 'SİPARİŞİ ONAYLA'; btn.classList.add('active'); btn.innerText = 'Siparişi Tamamla'; if (!window._hasAutoScrolledToForm) { 
-      FacebookPixel.trackInitiateCheckout(cart, calculateTotal()); 
-      TikTokPixel.trackInitiateCheckout(cart, calculateTotal()); // TIKTOK INITIATE CHECKOUT TETİKLENİYOR
-      setTimeout(() => order.scrollIntoView({ behavior: 'smooth' }), 300); 
-      window._hasAutoScrolledToForm = true; 
-  } }
-  let tot = 0; summary.innerHTML = '';
-  cart.forEach((item, idx) => {
-    const price = (idx > 0 && campaignSettings.active) ? campaignSettings.secondProductPrice : item.fiyat; tot += price;
-    const errClass = (!item.secilenVaryant) ? "error" : "";
-    summary.innerHTML += `<div class="cart-item ${!item.secilenVaryant ? 'missing-variant' : ''}"><button onclick="window.removeFromCart(${item.cartId})" class="remove-btn">✕ Kaldır</button><img src="${item.resim}" alt="${item.isim}"><div style="flex:1;"><div style="font-weight:700;">${item.isim}</div><!--<div style="color:var(--primary); font-weight:800; margin:6px 0;">${price} ₺</div>--><select id="variant-${item.cartId}" class="variant-select ${errClass}" onchange="window.handleVariantChange(${item.cartId})"><option value="">Beden Seçiniz *</option>${(item.varyantlar||[]).map(v => `<option value="${v}" ${item.secilenVaryant===v?'selected':''}>${v}</option>`).join('')}</select><div class="variant-warning" style="display:${errClass?'flex':'none'}">⚠️ Lütfen beden seçin</div></div></div>`;
+  
+  if (cart.length === 0) { 
+      warn.className = 'warning-banner danger'; document.getElementById('warning-icon').innerText = '⚠️'; document.getElementById('warning-title').innerText = 'Ürün Seçimi Gerekli'; document.getElementById('warning-message').innerText = `Sipariş verebilmek için en az ${min} ürün seçin.`; subBtn.disabled = true; subBtn.classList.remove('active'); subBtn.innerText = `${min} ürün seçmeniz gerekiyor`; btn.classList.remove('active'); btn.innerText = 'Ürün Seçin'; window._hasAutoScrolledToForm = false; 
+  } else if (cart.length < min) { 
+      warn.className = 'warning-banner danger'; document.getElementById('warning-icon').innerText = '⚠️'; document.getElementById('warning-title').innerText = 'Ürün Seçimi Eksik'; document.getElementById('warning-message').innerText = `En az ${min} ürün seçmelisiniz. ${min - cart.length} ürün daha ekleyin.`; subBtn.disabled = true; subBtn.classList.remove('active'); subBtn.innerText = `${min - cart.length} ürün daha seçmelisiniz`; btn.classList.remove('active'); btn.innerText = `${min - cart.length} Ürün Daha Seçin`; window._hasAutoScrolledToForm = false; 
+  } else if (hasMissing) { 
+      warn.className = 'warning-banner warning'; document.getElementById('warning-icon').innerText = '⚠️'; document.getElementById('warning-title').innerText = 'Beden Seçimi Eksik'; document.getElementById('warning-message').innerText = 'Lütfen sepetteki ürünler için numara/beden seçimi yapın.'; subBtn.disabled = true; subBtn.classList.remove('active'); subBtn.innerText = '⚠️ Lütfen tüm seçimleri tamamlayın'; btn.classList.remove('active'); btn.innerText = 'Numara/Beden Seçin'; window._hasAutoScrolledToForm = false; 
+  } else { 
+      warn.className = 'warning-banner success'; document.getElementById('warning-icon').innerText = '✅'; document.getElementById('warning-title').innerText = 'Siparişe Hazırsınız'; document.getElementById('warning-message').innerText = 'Tüm seçimler tamamlandı. Formu doldurarak siparişinizi onaylayabilirsiniz.'; subBtn.disabled = false; subBtn.classList.add('active'); subBtn.innerText = 'SİPARİŞİ ONAYLA'; btn.classList.add('active'); btn.innerText = 'Siparişi Tamamla'; 
+      if (!window._hasAutoScrolledToForm) { 
+          FacebookPixel.trackInitiateCheckout(cart, calculateTotal()); 
+          TikTokPixel.trackInitiateCheckout(cart, calculateTotal()); 
+          setTimeout(() => order.scrollIntoView({ behavior: 'smooth' }), 300); 
+          window._hasAutoScrolledToForm = true; 
+      } 
+  }
+  
+  summary.innerHTML = '';
+  cart.forEach((item, index) => {
+    let vHtml = '', isErr = false;
+    let vGroups = item.cokluVaryantlar;
+    if (!vGroups || vGroups.length === 0) vGroups = [{ ad: item.varyantAdi || 'Beden', secenekler: item.varyantlar || [] }];
+    if (!item.secilenVaryantlar) item.secilenVaryantlar = {};
+
+    vGroups.forEach(g => {
+        const v = item.secilenVaryantlar[g.ad] || "";
+        if (!v) isErr = true;
+        const errC = !v ? "error" : "";
+        const opts = g.secenekler.map(opt => `<option value="${opt}" ${v === opt ? 'selected' : ''}>${opt}</option>`).join('');
+        vHtml += `<select class="variant-select ${errC}" style="margin-top:6px;" onchange="window.handleMultiVariantChange(${item.cartId}, '${g.ad}', this.value)" required><option value="">${g.ad} Seçin *</option>${opts}</select>`;
+    });
+
+    const price = getPriceForItem(item, index);
+    summary.innerHTML += `<div class="cart-item ${isErr ? 'missing-variant' : ''}"><button type="button" onclick="window.removeFromCart(${item.cartId})" class="remove-btn">✕ Kaldır</button><img src="${item.resim}" alt="${item.isim}"><div style="flex:1;"><div style="font-weight:700; font-size:13px;" class="line-clamp-2">${item.isim}</div><!-- <div style="color:var(--primary); font-weight:800; margin:4px 0;">${price} ₺</div> -->${vHtml}<div class="variant-warning" style="display:${isErr?'flex':'none'}">⚠️ Lütfen tüm seçimleri yapın</div></div></div>`;
   });
-  count.innerText = `${cart.length} ÜRÜN`; total.innerText = tot.toFixed(2) + ' ₺';
+  
+  const calcTotal = calculateTotal();
+  if(cart.length > 0 && campaignSettings.cargoActive && campaignSettings.cargoPrice > 0) {
+      summary.innerHTML += `<div class="cart-item" style="justify-content:space-between; align-items:center; background:#eff6ff; border-color:#bfdbfe;"><div style="font-weight:700; color:#1e3a8a;">🚚 Kargo Ücreti</div><div style="font-weight:800; color:#1d4ed8;">${campaignSettings.cargoPrice} ₺</div></div>`;
+  }
+  
+  count.innerText = `${cart.length} ÜRÜN`; total.innerText = calcTotal.toFixed(2) + ' ₺';
 }
 
-window.addToCart = (id, variant = '') => { 
+window.addToCartWithVariant = (id, isComplex) => {
+    let selVal = '';
+    window.addToCart(id, selVal);
+};
+
+window.addToCart = (id, singleVariantVal = '') => { 
   const p = allProducts.find(x => x.id === id); 
   if (!p) return; 
-  cart.push({ ...p, cartId: Date.now(), secilenVaryant: variant }); 
+  
+  const max = (campaignSettings && typeof campaignSettings.maxOrderCount !== 'undefined') ? campaignSettings.maxOrderCount : 5;
+  if (max !== null && Number.isFinite(max) && cart.length >= max) {
+      showToast(`⚠️ Maksimum ${max} ürün seçebilirsiniz.`, 'warning'); return;
+  }
+  
+  const newItem = { ...p, cartId: Date.now(), secilenVaryantlar: {} };
+  if (singleVariantVal) {
+      const gName = (p.cokluVaryantlar && p.cokluVaryantlar.length > 0) ? p.cokluVaryantlar[0].ad : (p.varyantAdi || 'Beden');
+      newItem.secilenVaryantlar[gName] = singleVariantVal;
+  }
+  
+  cart.push(newItem); 
   FacebookPixel.trackAddToCart(p); 
-  TikTokPixel.trackAddToCart(p); // TIKTOK ADD TO CART TETİKLENİYOR
+  TikTokPixel.trackAddToCart(p);
   updateUI(); 
-  showToast(`✓ ${p.isim} ${variant} numaralı ayakkabı sepete eklendi.`, 'success'); 
+  showToast(`✓ Ürün sepete eklendi (${cart.length}/${max})`, 'success'); 
 };
 
 window.removeFromCart = (id) => { cart = cart.filter(x => x.cartId !== id); updateUI(); };
-window.handleVariantChange = (id) => { const el = document.getElementById(`variant-${id}`); const item = cart.find(x => x.cartId === id); if(item && el) item.secilenVaryant = el.value; updateUI(); };
-window.processStickyClick = () => { const min = campaignSettings.minOrderCount || 2; if(cart.length === 0) { showToast('⚠️ Lütfen önce ürün seçin', 'warning'); return; } if(cart.length < min) { showToast(`⚠️ En az ${min} ürün seçmelisiniz.`, 'warning'); return; } if(cart.some(i => !i.secilenVaryant)) { showToast('⚠️ Lütfen beden seçimlerini tamamlayın.', 'warning'); document.getElementById('order-section').scrollIntoView({ behavior: 'smooth' }); return; } document.getElementById('submitBtn').click(); };
 
-// Ürün Yükleme
+window.handleMultiVariantChange = (cartId, groupName, value) => {
+  const item = cart.find(i => i.cartId === cartId);
+  if (item) { if (!item.secilenVaryantlar) item.secilenVaryantlar = {}; item.secilenVaryantlar[groupName] = value; }
+  updateUI();
+};
+
+window.processStickyClick = () => { 
+    const min = campaignSettings.minOrderCount || 1; 
+    if(cart.length === 0) { showToast('⚠️ Lütfen önce ürün seçin', 'warning'); return; } 
+    if(cart.length < min) { showToast(`⚠️ En az ${min} ürün seçmelisiniz.`, 'warning'); return; } 
+    
+    const hasMissing = cart.some(i => {
+      let vGroups = i.cokluVaryantlar; if (!vGroups || vGroups.length === 0) vGroups = [{ ad: i.varyantAdi || 'Beden', secenekler: i.varyantlar || [] }];
+      for (let g of vGroups) { if (!i.secilenVaryantlar || !i.secilenVaryantlar[g.ad]) return true; } return false;
+    });
+    
+    if(hasMissing) { showToast('⚠️ Lütfen eksik beden seçimlerini tamamlayın.', 'warning'); document.getElementById('order-section').scrollIntoView({ behavior: 'smooth' }); return; } 
+    document.getElementById('submitBtn').click(); 
+};
+
+// Gelişmiş Ürün Yükleme (Çoklu Varyant Destekli ve Eski Tasarımı Koruyan Yapı)
 async function loadProducts() {
   const q = await getDocs(collection(db, "products"));
   document.getElementById('loading').style.display = 'none';
@@ -619,49 +756,54 @@ async function loadProducts() {
     if(p.aktif) prods.push(p); 
   });
   
-  // Tarihe göre sıralama
-  prods.sort((a,b) => (a.eklenmeTarihi?.toDate() || new Date(0)) - (b.eklenmeTarihi?.toDate() || new Date(0)));
+  prods.forEach(p => { 
+      p.pinned=!!p.pinned; 
+      p._ekMs=p.eklenmeTarihi?(p.eklenmeTarihi.toDate?p.eklenmeTarihi.toDate().getTime():(p.eklenmeTarihi.seconds?p.eklenmeTarihi.seconds*1000:Date.now())):Date.now(); 
+      p._order=(typeof p.order==='number')?p.order:p._ekMs; 
+  });
+  prods.sort((a,b) => { if (a.pinned!==b.pinned) return a.pinned?-1:1; if(a._order!==b._order) return a._order-b._order; return b._ekMs-a._ekMs; });
   allProducts = prods;
   
-  // Performans ve Swiper DOM çökmesini önlemek için HTML'i değişkenlerde topluyoruz
   let bestHtml = '';
   let allHtml = '';
   
   prods.forEach((p, idx) => {
-// 1. Butonlara "w-full" eklendi (kendi hücresini tam doldurması için) ve "truncate" eklendi (yazı taşmasın diye)
-    const variants = (p.varyantlar || []).map(v => `<button type="button" onclick="event.stopPropagation(); window.addToCart('${p.id}', '${v}')" class="w-full py-1.5 px-1 text-xs font-bold bg-white border-2 border-blue-500 text-blue-600 hover:bg-blue-600 hover:text-white rounded-lg shadow-sm transition-all truncate">${v}</button>`).join('');
-    
-const card = `<div class="p-2 border border-mavi rounded-lg relative animasyonhover cursor-pointer group flex flex-col">
+    let variantsHtml = '';
+    const isComplex = p.cokluVaryantlar && p.cokluVaryantlar.length > 1;
+
+    if (isComplex) {
+         variantsHtml = `<button type="button" onclick="event.stopPropagation(); window.addToCartWithVariant('${p.id}', true)" class="w-full py-1.5 px-1 text-xs font-bold bg-white border-2 border-blue-500 text-blue-600 hover:bg-blue-600 hover:text-white rounded-lg shadow-sm transition-all">ÇOKLU SEÇENEK</button>`;
+    } else {
+         let opts = [];
+         if (p.cokluVaryantlar && p.cokluVaryantlar.length > 0) opts = p.cokluVaryantlar[0].secenekler;
+         else if (p.varyantlar) opts = p.varyantlar;
+         variantsHtml = `<div class="grid grid-cols-2 gap-2">` + opts.map(v => `<button type="button" onclick="event.stopPropagation(); window.addToCart('${p.id}', '${v}')" class="w-full py-1.5 px-1 text-xs font-bold bg-white border-2 border-blue-500 text-blue-600 hover:bg-blue-600 hover:text-white rounded-lg shadow-sm transition-all truncate">${v}</button>`).join('') + `</div>`;
+    }
+
+    const card = `<div class="p-2 border border-mavi rounded-lg relative animasyonhover cursor-pointer group flex flex-col h-full">
       <img class="rounded-lg object-cover w-full lg:h-[300px] h-[140px] group-hover:scale-105 transition" src="${p.resim}" alt="${p.isim}" loading="lazy">
       <div class="mt-2 w-full flex-1 flex flex-col justify-between">
         <h3 class="font-semibold lg:text-base text-sm truncate">${p.isim}</h3>
         <div class="mt-2 w-full">
-          <span class="block text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1.5 pl-0.5">${p.varyantAdi ? p.varyantAdi + ' Seç' : 'NUMARA SEÇİN'}</span>
-          <div class="grid grid-cols-2 gap-2">${variants}</div>
+          <span class="block text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1.5 pl-0.5">${(p.cokluVaryantlar && p.cokluVaryantlar.length > 0) ? p.cokluVaryantlar[0].ad + ' Seç' : (p.varyantAdi ? p.varyantAdi + ' Seç' : 'NUMARA SEÇİN')}</span>
+          ${variantsHtml}
         </div>
       </div>
       ${idx < 3 ? '<img class="lg:w-[50px] w-[40px] lg:h-[50px] h-[40px] absolute top-5 right-5" src="./view/img/firsat.png" alt="">' : ''}
     </div>`;
     
-    // Sadece ilk 8 ürünü slider'a ekle
     if(idx < 8) {
-        bestHtml += `<div class="swiper-slide">${card}</div>`;
-        
+        bestHtml += `<div class="swiper-slide h-auto">${card}</div>`;
     }
-    
-    // Bütün ürünleri grid'e ekle
     allHtml += card;
   });
   
-  // HTML yapılarını DOM'a TEK SEFERDE basıyoruz.
   bestWrapper.innerHTML = bestHtml;
   allGrid.innerHTML = allHtml;
 }
 
-// DİNAMİK KAMPANYA BANNER AYARLARI
 async function loadDynamicBanner() {
   try {
-    // Site ayarlarından
     if (window._siteSettings) {
       const s = window._siteSettings;
       if (s.campaignTitle) document.getElementById('dynamicCampaignTitle').innerText = s.campaignTitle;
@@ -670,11 +812,15 @@ async function loadDynamicBanner() {
       if (s.heroBannerUrl) document.getElementById('heroBannerBg').style.backgroundImage = `url('${s.heroBannerUrl}')`;
     }
     
-    // Kampanya ayarlarından
     const campDoc = await getDoc(doc(db, "settings", "campaign"));
     if (campDoc.exists()) {
       campaignSettings = { ...campaignSettings, ...campDoc.data() };
+      campaignSettings.cargoActive = campaignSettings.cargoActive === true;
+      campaignSettings.cargoPrice = Number(campaignSettings.cargoPrice) || 0;
       if (!campaignSettings.minOrderCount) campaignSettings.minOrderCount = 2;
+      const max = Number(campaignSettings.maxOrderCount);
+      campaignSettings.maxOrderCount = (isFinite(max) && max > 0) ? Math.floor(max) : 5;
+      
       if (campaignSettings.active) {
         if (campaignSettings.message) document.getElementById('dynamicCampaignTitle').innerText = campaignSettings.message;
         if (campaignSettings.subtitleMessage) document.getElementById('dynamicCampaignSubtitle').innerText = campaignSettings.subtitleMessage;
@@ -684,80 +830,92 @@ async function loadDynamicBanner() {
   } catch(e) {}
 }
 
-// Sipariş Gönderme
-// Sipariş Gönderme
+// Gelişmiş Sipariş Gönderme (Kaynak Yakalama, UTM vb.)
 document.getElementById('orderForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   
-  // TELEFON NUMARASI DOĞRULAMASI EKLENDİ
-  const telInput = document.getElementById('telefon').value;
-  if (telInput.length !== 11 || !telInput.startsWith('05')) {
-    showToast('⚠️ Lütfen 05 ile başlayan 11 haneli geçerli bir numara girin.', 'error');
-    return;
-  }
+  let adSoyad = sanitizeInput(document.getElementById('adSoyad').value);
+  let telefon = document.getElementById('telefon').value;
+  let adres = sanitizeInput(document.getElementById('adres').value);
+  let mesaj = sanitizeInput(document.getElementById('mesaj').value);
 
-  if(cart.some(i => !i.secilenVaryant)) { showToast('⚠️ Tüm ürünler için beden seçin', 'error'); return; }
+  if (!isValidName(adSoyad)) return showToast('⚠️ Lütfen geçerli bir ad soyad girin.', 'error');
+  if (!isValidPhone(telefon)) return showToast('⚠️ Lütfen 05 ile başlayan 11 haneli geçerli bir numara girin.', 'error');
+  if (adres.length < 10) return showToast('⚠️ Lütfen geçerli bir açık adres girin.', 'error');
+
+  const hasMissing = cart.some(i => {
+      let vGroups = i.cokluVaryantlar; if (!vGroups || vGroups.length === 0) vGroups = [{ ad: i.varyantAdi || 'Beden', secenekler: i.varyantlar || [] }];
+      for (let g of vGroups) { if (!i.secilenVaryantlar || !i.secilenVaryantlar[g.ad]) return true; } return false;
+  });
+  if(hasMissing) { showToast('⚠️ Tüm ürünler için seçimleri tamamlayın', 'error'); return; }
+  
   const btn = document.getElementById('submitBtn'); btn.disabled = true; btn.innerText = "⏳ İŞLENİYOR...";
+  
   try {
-    const ip = await (await fetch('https://api.ipify.org?format=json')).json(); userData.ip = ip.ip;
-    const ref = await addDoc(collection(db, "orders"), {
-      musteri: { adSoyad: document.getElementById('adSoyad').value, tel: document.getElementById('telefon').value, il: document.getElementById('il').value, ilce: document.getElementById('ilce').value, adres: document.getElementById('adres').value, mesaj: document.getElementById('mesaj').value },
-      urunler: cart.map(i => ({ id: i.id, isim: i.isim, varyant: i.secilenVaryant })),
-      toplamTutar: calculateTotal().toFixed(2) + ' ₺', ip: ip.ip, tarih: serverTimestamp(), durum: 'yeni', kaynakSite: window.location.hostname
+    let currentIp = ""; try { currentIp = (await (await fetch('https://api.ipify.org?format=json')).json()).ip; } catch(e) {}
+    const total = calculateTotal();
+    
+    const utm = sessionStorage.getItem('utm_source');
+    const tcl = sessionStorage.getItem('ttclid');
+    const fbc = sessionStorage.getItem('fbclid');
+    
+    let orderKaynak = window.AKTIF_DOMAIN || window.location.hostname;
+    if (tcl || (utm && utm.toLowerCase() === 'tiktok')) {
+        orderKaynak = 'tiktok';
+    } else if (fbc || (utm && ['ig', 'fb', 'facebook', 'instagram'].includes(utm.toLowerCase()))) {
+        orderKaynak = utm ? utm.toLowerCase() : 'meta';
+    } else if (utm) {
+        orderKaynak = utm;
+    }
+
+    const orderRef = await addDoc(collection(db, "orders"), {
+      musteri: { adSoyad: adSoyad, tel: telefon, il: document.getElementById('il').value, ilce: document.getElementById('ilce').value, adres: adres, mesaj: mesaj },
+      urunler: cart.map(i => {
+          let vStr = i.secilenVaryantlar && Object.keys(i.secilenVaryantlar).length > 0 ? Object.entries(i.secilenVaryantlar).map(([k, v]) => `${k}: ${v}`).join(' | ') : "";
+          return { id: i.id, isim: i.isim, varyant: vStr };
+      }),
+      visitorId: localStorage.getItem('visitorId'), 
+      kaynak: orderKaynak,
+      utm_campaign: sessionStorage.getItem('utm_campaign'), 
+      utm_medium: sessionStorage.getItem('utm_medium'), 
+      utm_id: sessionStorage.getItem('utm_id'),
+      ttclid: tcl, 
+      fbclid: fbc,
+      toplamTutar: total.toFixed(2) + ' ₺', ip: currentIp, tarih: serverTimestamp(), durum: 'yeni', kaynakSite: window.location.hostname
     });
     
-    FacebookPixel.trackPurchase(ref.id, cart, calculateTotal(), { phone: document.getElementById('telefon').value, firstName: document.getElementById('adSoyad').value.split(' ')[0] });
-    TikTokPixel.trackCompletePayment(ref.id, cart, calculateTotal()); // TIKTOK COMPLETE PAYMENT TETİKLENİYOR
+    const cInfo = { phone: telefon, firstName: adSoyad.split(' ')[0], lastName: adSoyad.split(' ').slice(1).join(' '), city: document.getElementById('il').value, zip: document.getElementById('ilce').value };
+    FacebookPixel.trackPurchase(orderRef.id, cart, total, cInfo); 
+    TikTokPixel.trackCompletePayment(orderRef.id, cart, total, cInfo); 
     
-    window.showSuccessModal(); setTimeout(() => location.reload(), 15000);
+    window.showSuccessModal(); 
+    ['ttclid', 'tracked_ttclid', 'fbclid'].forEach(k => sessionStorage.removeItem(k));
+    setTimeout(() => location.reload(), 15000);
   } catch(err) { showToast('❌ Hata: ' + err.message, 'error'); btn.disabled = false; btn.innerText = 'SİPARİŞİ ONAYLA'; }
 });
 
-// Başlatma
 async function init() {
   try {
     window.AKTIF_DOMAIN = window.location.hostname;
     
-    try { 
-      userData.ip = (await fetch('https://api.ipify.org?format=json')).json().ip; 
-    } catch(e) {
-      console.log("IP alınamadı:", e);
-    }
-    
+    trackVisitor();
     await loadDynamicBanner();
     initIlIlceSelectors();
+    setupValidationListeners();
     await loadProducts();
-    updateReviewDisplay();
+    await loadReviewsFromDB();
     
-    // Swiper Ayarları (Yan yana 5 ürün çıkacak şekilde güncellendi)
     if(typeof Swiper !== 'undefined') { 
-      if(window.swiper) {
-          window.swiper.destroy(true, true);
-      }
+      if(window.swiper) window.swiper.destroy(true, true);
       window.swiper = new Swiper(".mySwiper3", { 
         slidesPerView: 2, 
         spaceBetween: 10, 
-        // Otomatik kaydırma ayarları eklendi
-        autoplay: {
-          delay: 2000, // 2000 milisaniye = 2 saniye
-          disableOnInteraction: false // Kullanıcı ekrana dokunup bıraktığında durmaması için
-        },
-        pagination: { 
-          el: ".swiper-pagination", 
-          clickable: true 
-        }, 
-        breakpoints: { 
-          320: { slidesPerView: 2, spaceBetween: 10 }, 
-          640: { slidesPerView: 3, spaceBetween: 15 }, 
-          768: { slidesPerView: 4, spaceBetween: 20 }, 
-          1024: { slidesPerView: 5, spaceBetween: 20 }
-        } 
+        autoplay: { delay: 2000, disableOnInteraction: false },
+        pagination: { el: ".swiper-pagination", clickable: true }, 
+        breakpoints: { 320: { slidesPerView: 2, spaceBetween: 10 }, 640: { slidesPerView: 3, spaceBetween: 15 }, 768: { slidesPerView: 4, spaceBetween: 20 }, 1024: { slidesPerView: 5, spaceBetween: 20 } } 
       }); 
     }
-    
-  } catch(err) { 
-    console.error("Init hatası:", err); 
-  }
+  } catch(err) { console.error("Init hatası:", err); }
 }
 init();
 </script>
