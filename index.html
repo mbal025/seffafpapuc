@@ -439,21 +439,47 @@ function calculateTotal() {
 }
 
 // Gelişmiş Validasyon
-function sanitizeInput(input) { return input ? input.replace(/<[^>]*>/g, '').trim() : ''; }
+function sanitizeInput(input) { return input ? input.replace(/<[^>]*>/g, '').replace(/[\r\n]+/g, ' ').trim() : ''; }
 function isValidName(input) { return /^[a-zA-ZğĞüÜşŞıİöÖçÇ\s]+$/.test(input) && input.length >= 3; }
 function isValidPhone(input) { return /^\d+$/.test(input) && input.length === 11 && input.startsWith('05'); }
 
 function setupValidationListeners() {
-  ['adSoyad', 'telefon', 'adres', 'mesaj'].forEach(id => {
-    const el = document.getElementById(id);
-    if(el && id==='adSoyad') el.addEventListener('input', function() { this.value = this.value.replace(/[^a-zA-ZğĞüÜşŞıİöÖçÇ\s]/g, '').substring(0, 50).replace(/\s+/g, ' '); });
-    if(el && id==='telefon') el.addEventListener('input', function() {
-        let v = this.value.replace(/[^0-9]/g, '');
-        if (v.startsWith('905')) v = '0' + v.substring(2); else if (v.startsWith('5')) v = '0' + v; else if (v.length > 0 && !v.startsWith('0')) v = '0' + v;
-        this.value = v.substring(0, 11);
-    });
-  });
-}
+      ['adSoyad', 'telefon', 'adres', 'mesaj'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+
+        // Kural 1: Tüm alanlarda Enter tuşunu engelle. (Formun yanlışlıkla gönderilmesini ve alt satıra geçmeyi durdurur)
+        el.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault(); 
+            // Eğer adres veya mesaj alanındaysa, enter yerine direkt bir boşluk ekle
+            if (id === 'adres' || id === 'mesaj') {
+              const start = this.selectionStart;
+              const end = this.selectionEnd;
+              this.value = this.value.substring(0, start) + " " + this.value.substring(end);
+              this.selectionStart = this.selectionEnd = start + 1;
+            }
+          }
+        });
+
+        // Kural 2: Adres ve mesaj alanına kopyala/yapıştır ile alt satır karakteri gelirse onları anında boşlukla değiştir
+        if (id === 'adres' || id === 'mesaj') {
+          el.addEventListener('input', function() {
+            if (/[\r\n]/.test(this.value)) {
+              this.value = this.value.replace(/[\r\n]+/g, ' ');
+            }
+          });
+        }
+
+        // Mevcut doğrulama kuralların (Dokunulmadı)
+        if(id==='adSoyad') el.addEventListener('input', function() { this.value = this.value.replace(/[^a-zA-ZğĞüÜşŞıİöÖçÇ\s]/g, '').substring(0, 50).replace(/\s+/g, ' '); });
+        if(id==='telefon') el.addEventListener('input', function() {
+            let v = this.value.replace(/[^0-9]/g, '');
+            if (v.startsWith('905')) v = '0' + v.substring(2); else if (v.startsWith('5')) v = '0' + v; else if (v.length > 0 && !v.startsWith('0')) v = '0' + v;
+            this.value = v.substring(0, 11);
+        });
+      });
+    }
 
 // Gelişmiş Pixel Fonksiyonları
 const FacebookPixel = {
