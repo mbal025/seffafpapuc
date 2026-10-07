@@ -29,14 +29,14 @@ window.addEventListener('DOMContentLoaded', async () => {
   try {
     const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js");
     const { getFirestore, doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js");
-    const firebaseConfig = {
-      apiKey: "AIzaSyDniXyN2LAf5cwgJxYvJKKowe8UhW7GQr8",
-      authDomain: "papuc-98783.firebaseapp.com",
-      projectId: "papuc-98783",
-      storageBucket: "papuc-98783.firebasestorage.app",
-      messagingSenderId: "953928274442",
-      appId: "1:953928274442:web:6d9f39a36dd4e4154285f3"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyDMfjd86YqGgVOnEXYPEym7JXpS5gu13f8",
+  authDomain: "papuc-insta.firebaseapp.com",
+  projectId: "papuc-insta",
+  storageBucket: "papuc-insta.firebasestorage.app",
+  messagingSenderId: "698576196222",
+  appId: "1:698576196222:web:8ef067ccfdfd50aba7be2f"
+};
     const app = initializeApp(firebaseConfig, 'pixelApp');
     const db = getFirestore(app);
     const settingsDoc = await getDoc(doc(db, "settings", "siteConfig"));
@@ -222,8 +222,8 @@ window.addEventListener('DOMContentLoaded', async () => {
       
       <!-- Tipografi & Maskeleme Efektleri -->
       <div class="flex items-baseline">
-        <span class="brand-text-seffaf">Ayakkabı </span>
-        <span class="brand-text-papuc"> Diyarı</span>
+        <span class="brand-text-seffaf">Şeffaf</span>
+        <span class="brand-text-papuc">Papuç</span>
         <span class="brand-dot">.</span>
       </div>
       
@@ -372,7 +372,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   </div>
 </footer>
 <div class="container mx-auto py-5 lg:px-0 px-5 flex items-center justify-between mb-10">
-  <p class="lg:text-base text-sm">Copyright © 2026 Ayakkabı Diyarı</p>
+  <p class="lg:text-base text-sm">Copyright © 2026 Şeffaf Papuç</p>
   <div class="flex items-center gap-2"><i class="ri-visa-fill ri-xl"></i><i class="ri-mastercard-fill ri-xl"></i></div>
 </div>
 
@@ -382,12 +382,12 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebas
 import { getFirestore, collection, getDocs, doc, getDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDniXyN2LAf5cwgJxYvJKKowe8UhW7GQr8",
-  authDomain: "papuc-98783.firebaseapp.com",
-  projectId: "papuc-98783",
-  storageBucket: "papuc-98783.firebasestorage.app",
-  messagingSenderId: "953928274442",
-  appId: "1:953928274442:web:6d9f39a36dd4e4154285f3"
+  apiKey: "AIzaSyDMfjd86YqGgVOnEXYPEym7JXpS5gu13f8",
+  authDomain: "papuc-insta.firebaseapp.com",
+  projectId: "papuc-insta",
+  storageBucket: "papuc-insta.firebasestorage.app",
+  messagingSenderId: "698576196222",
+  appId: "1:698576196222:web:8ef067ccfdfd50aba7be2f"
 };
 const app = initializeApp(firebaseConfig, 'mainApp');
 const db = getFirestore(app);
@@ -439,47 +439,21 @@ function calculateTotal() {
 }
 
 // Gelişmiş Validasyon
-function sanitizeInput(input) { return input ? input.replace(/<[^>]*>/g, '').replace(/[\r\n]+/g, ' ').trim() : ''; }
+function sanitizeInput(input) { return input ? input.replace(/<[^>]*>/g, '').trim() : ''; }
 function isValidName(input) { return /^[a-zA-ZğĞüÜşŞıİöÖçÇ\s]+$/.test(input) && input.length >= 3; }
 function isValidPhone(input) { return /^\d+$/.test(input) && input.length === 11 && input.startsWith('05'); }
 
 function setupValidationListeners() {
-      ['adSoyad', 'telefon', 'adres', 'mesaj'].forEach(id => {
-        const el = document.getElementById(id);
-        if (!el) return;
-
-        // Kural 1: Tüm alanlarda Enter tuşunu engelle. (Formun yanlışlıkla gönderilmesini ve alt satıra geçmeyi durdurur)
-        el.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter') {
-            e.preventDefault(); 
-            // Eğer adres veya mesaj alanındaysa, enter yerine direkt bir boşluk ekle
-            if (id === 'adres' || id === 'mesaj') {
-              const start = this.selectionStart;
-              const end = this.selectionEnd;
-              this.value = this.value.substring(0, start) + " " + this.value.substring(end);
-              this.selectionStart = this.selectionEnd = start + 1;
-            }
-          }
-        });
-
-        // Kural 2: Adres ve mesaj alanına kopyala/yapıştır ile alt satır karakteri gelirse onları anında boşlukla değiştir
-        if (id === 'adres' || id === 'mesaj') {
-          el.addEventListener('input', function() {
-            if (/[\r\n]/.test(this.value)) {
-              this.value = this.value.replace(/[\r\n]+/g, ' ');
-            }
-          });
-        }
-
-        // Mevcut doğrulama kuralların (Dokunulmadı)
-        if(id==='adSoyad') el.addEventListener('input', function() { this.value = this.value.replace(/[^a-zA-ZğĞüÜşŞıİöÖçÇ\s]/g, '').substring(0, 50).replace(/\s+/g, ' '); });
-        if(id==='telefon') el.addEventListener('input', function() {
-            let v = this.value.replace(/[^0-9]/g, '');
-            if (v.startsWith('905')) v = '0' + v.substring(2); else if (v.startsWith('5')) v = '0' + v; else if (v.length > 0 && !v.startsWith('0')) v = '0' + v;
-            this.value = v.substring(0, 11);
-        });
-      });
-    }
+  ['adSoyad', 'telefon', 'adres', 'mesaj'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el && id==='adSoyad') el.addEventListener('input', function() { this.value = this.value.replace(/[^a-zA-ZğĞüÜşŞıİöÖçÇ\s]/g, '').substring(0, 50).replace(/\s+/g, ' '); });
+    if(el && id==='telefon') el.addEventListener('input', function() {
+        let v = this.value.replace(/[^0-9]/g, '');
+        if (v.startsWith('905')) v = '0' + v.substring(2); else if (v.startsWith('5')) v = '0' + v; else if (v.length > 0 && !v.startsWith('0')) v = '0' + v;
+        this.value = v.substring(0, 11);
+    });
+  });
+}
 
 // Gelişmiş Pixel Fonksiyonları
 const FacebookPixel = {
