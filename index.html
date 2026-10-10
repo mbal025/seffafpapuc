@@ -936,5 +936,39 @@ init();
 <script>
 function startCountdown(dakika) { let targetTime; let stored = localStorage.getItem("countdownEndTime"); if(stored) targetTime = parseInt(stored); else { targetTime = Date.now() + (dakika || 1294) * 60 * 1000; localStorage.setItem("countdownEndTime", targetTime); } function update() { let rem = targetTime - Date.now(); if(rem <= 0) { document.getElementById("hours").textContent = "00"; document.getElementById("minutes").textContent = "00"; document.getElementById("seconds").textContent = "00"; localStorage.removeItem("countdownEndTime"); clearInterval(int); return; } document.getElementById("hours").textContent = String(Math.floor(rem / 3600000)).padStart(2,'0'); document.getElementById("minutes").textContent = String(Math.floor((rem % 3600000) / 60000)).padStart(2,'0'); document.getElementById("seconds").textContent = String(Math.floor((rem % 60000) / 1000)).padStart(2,'0'); } update(); let int = setInterval(update, 1000); } startCountdown(localStorage.getItem("countdownEndTime") ? 0 : 1294);
 </script>
+  
+<script>
+// Form alanlarında Enter tuşuyla sahte giriş ve
+// istenmeyen form gönderimini engelle.
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('orderForm');
+
+    if (!form) return;
+
+    const alanlar = [
+        document.getElementById('adSoyad'),
+        document.getElementById('telefon'),
+        document.getElementById('adres'),
+        document.getElementById('mesaj')
+    ];
+
+    alanlar.forEach(function (alan) {
+        if (!alan) return;
+
+        alan.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+            }
+        });
+    });
+
+    // Enter ile formun dolaylı olarak gönderilmesini engelle.
+    form.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+});
+</script>
 </body>
 </html>
